@@ -181,7 +181,7 @@
 	<haxelib name="flxanimate" />
 	<haxelib name="nape-haxe4" if="NAPE_ENABLED"/>
 	<haxelib name="hxp" if="android" />
-   <!-- <haxelib name="extension-androidtools" if="android" /> -->
+    <haxelib name="extension-androidtools" if="android" />
 	<haxelib name="hscript-improved" />
 	<haxelib name="hxdiscord_rpc" if="DISCORD_RPC"/>
 	<haxelib name="markdown" />
@@ -203,9 +203,9 @@
 	  <config:android permission="android.permission.INTERNET" />
 	  <config:android permission="android.permission.ACCESS_WIFI_STATE"/>
       <config:android permission="android.permission.ACCESS_NETWORK_STATE" />
-	  <!-- <config:android permission="android.permission.CAPTURE_AUDIO_OUTPUT" />
+	  <config:android permission="android.permission.CAPTURE_AUDIO_OUTPUT" />
 	  <android target-sdk-version="34" />
-	  <android min-sdk-version="19" /> -->
+	  <android min-sdk-version="19" />
 	  </section>
 
 	<!-- Fix compiling issues -->
