@@ -22,7 +22,7 @@
 
 <!-- Mobile Libraries -->
 <git name="hxcpp" url="https://github.com/MasterX-39/hxcpp-h" />
-<git name="extension-androidtools" url="https://github.com/MAJigsaw77/extension-androidtools" skipDeps="true" /> -->
+<git name="extension-androidtools" url="https://github.com/MAJigsaw77/extension-androidtools" skipDeps="true" />
 <lib name="hxp" version="1.3.0" />
 
 </libraries>
