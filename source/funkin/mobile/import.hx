@@ -1,7 +1,7 @@
 #if !macro
-import mobile.*;
-import mobile.utils.*;
-import mobile.backend.*;
+import funkin.mobile.*;
+import funkin.mobile.utils.*;
+import funkin.mobile.backend.*;
 
 using StringTools;
 #end
