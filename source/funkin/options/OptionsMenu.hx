@@ -101,7 +101,7 @@ class OptionsMenu extends TreeMenu {
 			}
 		}
       #if mobile
-	  addVPad(UP_DOWN, A_B_C);
+	  addVPad(UP_DOWN, A_B);
 	  addVPadCamera();
 	  vPad.visible = true;
 	  #end
