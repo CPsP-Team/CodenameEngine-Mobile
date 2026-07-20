@@ -63,10 +63,10 @@ class Config
 	{
 		#if MOD_SUPPORT
 		final moddyFolder:String = (ModsFolder.currentModFolder != null
-			&& ModsFolder.currentModFolder != "default") ? '${ModsFolder.modsPath}${ModsFolder.currentModFolder}/' : "../";
+			&& ModsFolder.currentModFolder != "default") ? '${ModsFolder.modsPath}${ModsFolder.currentModFolder}/' : "null/";
 		return moddyFolder;
 		#else
-		return "../";
+		return "null/";
 		#end
 	}
 
