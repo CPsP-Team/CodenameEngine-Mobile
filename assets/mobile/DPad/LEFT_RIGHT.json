@@ -7,7 +7,7 @@
       "offset": [[0, 0]],
       "hitbox": [[130, 130]],
       "showbounds": false,
-      "position": [10, 615],
+      "position": [10, 590],
       "scale": 0.9
     },
 	{
@@ -17,7 +17,7 @@
       "offset": [[0, 0]],
       "hitbox": [[130, 130]],
       "showbounds": false,
-      "position": [140, 615],
+      "position": [140, 590],
       "scale": 0.9
     }
   ]

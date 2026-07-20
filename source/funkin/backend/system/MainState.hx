@@ -177,6 +177,8 @@ class MainState extends FlxState {
 			}
 		}
 
+		mobile.Config.init();
+
 		FlxG.switchState(cast Type.createInstance(startState, []));
 	}
 }

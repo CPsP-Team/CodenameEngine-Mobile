@@ -1090,9 +1090,15 @@
 
 		@:dox(hide) function startSong():Void
 		{
+			var ek:String = " EK " + Options.extraButtons;
+			var eks:String = " EKS " + Options.extraButtons;
 			var extraKeyString = "";
-			if (Options.extraButtons > 0)
-				extraKeyString = " EK" + (Options.hitboxPos ? "S " : " ") + Options.extraButtons;
+
+			if (mobile.Config.Hitboxes.exists(Options.hitboxMode + eks) && Options.hitboxPos)
+				extraKeyString = eks;
+			else if (mobile.Config.Hitboxes.exists(Options.hitboxMode + ek))
+				extraKeyString = ek;
+			
 			addHitbox(Options.hitboxMode + extraKeyString);
 			addHitboxCamera();
 			for (hitbox in mobileManager.hitboxes) {

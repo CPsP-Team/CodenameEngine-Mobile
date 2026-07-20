@@ -253,10 +253,32 @@ class MobileUtil
 
 				var directory = Path.directory(fullPath);
 				if (!FileSystem.exists(directory)) FileSystem.createDirectory(directory);
+				var shouldCopy = !FileSystem.exists(fullPath);
 
-				if (!FileSystem.exists(fullPath)) {
+				if (!shouldCopy) {
+					try {
+						var assetBytes = Assets.getBytes(assetKey);
+						var localBytes = File.getBytes(fullPath);
+						
+						if (localBytes != null && assetBytes != null) {
+							if (localBytes.length != assetBytes.length) {
+								shouldCopy = true;
+							} else {
+								for (j in 0...localBytes.length) {
+									if (localBytes.get(j) != assetBytes[j]) {
+										shouldCopy = true;
+										break;
+									}
+								}
+							}
+						}
+					} catch (e:Dynamic) {
+						shouldCopy = true;
+					}
+				}
+
+				if (shouldCopy) {
 					var bytes:Bytes = null;
-
 					try {
 						bytes = Assets.getBytes(assetKey);
 					} catch (e:Dynamic) {

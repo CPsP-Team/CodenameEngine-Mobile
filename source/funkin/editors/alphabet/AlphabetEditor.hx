@@ -294,7 +294,7 @@ class AlphabetEditor extends UIState {
 		addDPad("LEFT_RIGHT");
 		addDPadCamera();
 		mobileManager.x += 225;
-		mobileManager.y -= 25;
+		//mobileManager.y -= 25;
 	}
 
 	override function destroy() {
