@@ -56,8 +56,10 @@ function create(event) {
 
 	FlxG.sound.play(Paths.sound(isThorns ? 'pixel/ANGRY' : 'pixel/clickText'));
 
-	addMobilePad('UP_DOWN', 'A');
-	addMobilePadCamera();
+	addDPad('UP_DOWN');
+	addDPadCamera();
+	addButton('A');
+	addButtonCamera();
 }
 
 function confText(text) {
