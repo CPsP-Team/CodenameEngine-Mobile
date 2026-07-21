@@ -3,7 +3,7 @@
     {
       "name": "pause",
       "id": "P",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1153, 0],
       "scale": 0.24,
 	  "subgraphic": {

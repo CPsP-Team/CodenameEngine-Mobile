@@ -3,7 +3,7 @@
     {
       "name": "buttonS",
       "id": "S",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [670, 600],
       "scale": 0.85,
       "subgraphic": {
@@ -13,7 +13,7 @@
     {
       "name": "buttonY",
       "id": "Y",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [560, 600],
       "scale": 0.85,
       "subgraphic": {
@@ -23,7 +23,7 @@
     {
       "name": "buttonV",
       "id": "V",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [450, 600],
       "scale": 0.85,
       "subgraphic": {
@@ -33,7 +33,7 @@
     {
       "name": "buttonW",
       "id": "W",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [670, 495],
       "scale": 0.85,
       "subgraphic": {
@@ -43,7 +43,7 @@
     {
       "name": "buttonZ",
       "id": "Z",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [560, 495],
       "scale": 0.85,
       "subgraphic": {
@@ -53,7 +53,7 @@
     {
       "name": "buttonC",
       "id": "C",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [450, 495],
       "scale": 0.85,
       "subgraphic": {
@@ -63,7 +63,7 @@
     {
       "name": "buttonP",
       "id": "P",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [670, 390],
       "scale": 0.85,
       "subgraphic": {
@@ -73,7 +73,7 @@
     {
       "name": "button2",
       "id": "2",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [560, 390],
       "scale": 0.85,
       "subgraphic": {
@@ -83,7 +83,7 @@
     {
       "name": "button1",
       "id": "1",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [450, 390],
       "scale": 0.85,
       "subgraphic": {
@@ -93,7 +93,7 @@
     {
       "name": "buttonD",
       "id": "D",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [670, 285],
       "scale": 0.85,
       "subgraphic": {

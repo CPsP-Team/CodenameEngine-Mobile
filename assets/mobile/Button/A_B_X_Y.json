@@ -3,7 +3,7 @@
     {
       "name": "buttonA",
       "id": "ACCEPT",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1153, 593],
       "scale": 0.24,
 	  "subgraphic": {
@@ -14,7 +14,7 @@
     {
       "name": "buttonB",
       "id": "BACK",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1033, 593],
       "scale": 0.24,
 	  "subgraphic": {
@@ -25,7 +25,7 @@
     {
       "name": "buttonX",
       "id": "X",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [913, 593],
       "scale": 0.24,
 	  "subgraphic": {
@@ -36,7 +36,7 @@
     {
       "name": "buttonY",
       "id": "Y",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [793, 593],
       "scale": 0.24,
 	  "subgraphic": {

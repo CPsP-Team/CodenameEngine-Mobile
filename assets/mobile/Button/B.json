@@ -3,7 +3,7 @@
     {
       "name": "buttonB",
       "id": "B",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1153, 593],
       "scale": 0.24,
 	  "subgraphic": {

@@ -3,7 +3,7 @@
     {
       "name": "buttonA",
       "id": "A",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1150, 600],
       "scale": 0.2125,
       "subgraphic": {
@@ -14,7 +14,7 @@
     {
       "name": "buttonB",
       "id": "B",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1045, 600],
       "scale": 0.2125,
       "subgraphic": {
@@ -25,7 +25,7 @@
     {
       "name": "buttonC",
       "id": "C",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [940, 600],
       "scale": 0.2125,
       "subgraphic": {
@@ -36,7 +36,7 @@
     {
       "name": "buttonX",
       "id": "X",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1150, 495],
       "scale": 0.2125,
       "subgraphic": {
@@ -47,7 +47,7 @@
     {
       "name": "buttonY",
       "id": "Y",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1045, 495],
       "scale": 0.2125,
       "subgraphic": {
@@ -58,7 +58,7 @@
     {
       "name": "buttonZ",
       "id": "Z",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [940, 495],
       "scale": 0.2125,
       "subgraphic": {
@@ -69,7 +69,7 @@
     {
       "name": "buttonV",
       "id": "V",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1150, 390],
       "scale": 0.2125,
       "subgraphic": {
@@ -80,7 +80,7 @@
     {
       "name": "buttonO",
       "id": "O",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1045, 390],
       "scale": 0.2125,
       "subgraphic": {
@@ -91,7 +91,7 @@
     {
       "name": "buttonP",
       "id": "P",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [940, 390],
       "scale": 0.2125,
       "subgraphic": {
@@ -102,7 +102,7 @@
     {
       "name": "buttonD",
       "id": "D",
-      "texture": "button_circle",
+      "texture": "button_bg",
       "position": [1150, 285],
       "scale": 0.2125,
       "subgraphic": {
