@@ -4,7 +4,7 @@
 	<git name="mobile-controls" url="https://github.com/ArkoseLabsOfficial/mobile-controls"/>
 
 	<!-- OpenFL & Lime (Required for Flixel) -->
-	<lib name="openfl" version="9.2.2" />
+	<git name="openfl" url="https://github.com/CodenameCrew/cne-openfl" ref="old" />
 	<git name="lime" url="https://github.com/ArkoseLabsOfficial/lime"/>
 
 	<!-- Flixel -->
@@ -23,4 +23,5 @@
 	<lib name="format" />
 	<lib name="markdown" />
 	<lib name="nape-haxe4" />
+	<git name="openfl" url="https://github.com/CodenameCrew/cne-openfl" ref="old" />
 </libraries>
