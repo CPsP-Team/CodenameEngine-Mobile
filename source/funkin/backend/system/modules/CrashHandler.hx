@@ -8,6 +8,8 @@ import openfl.events.ErrorEvent;
 import openfl.errors.Error;
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
+import sys.FileSystem;
+import sys.io.File;
 
 class CrashHandler {
 	public static function init() {
