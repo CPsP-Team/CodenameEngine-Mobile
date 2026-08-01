@@ -80,7 +80,9 @@ class MobileOptions extends OptionsScreen
 				FlxG.sound.muteKeys = [FlxKey.ZERO, FlxKey.NUMPADZERO];
 			}
 		}));
+		#if DEBUG_MENU
 		add(new Checkbox('Debug Console', 'If checked, A Debug Console Icon will show up.', "debugConsole"));
+		#end
 		#if android
 		add(externalOption = new ArrayOption('Folder', 'Which folder Codename Engine Mods should stored?\nCan be added custom folders, check android/data for that', storageTypes,
 			storageTypes, 'storageType'));
@@ -91,10 +93,12 @@ class MobileOptions extends OptionsScreen
 	{
 		super.close();
 		Options.save();
+		#if DEBUG_MENU
 		if (lastDebug != Options.debugConsole) {
 			DebugMenu.instance.closeMenu();
 			DebugMenu.instance.floatingBtn.visible = Options.debugConsole;
 		}
+		#end
 
 		#if android
 		if (lastExternal != externalOption.displayOptions[externalOption.currentSelection])

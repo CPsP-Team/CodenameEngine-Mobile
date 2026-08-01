@@ -12,8 +12,10 @@ class BetaWarningState extends MusicBeatState {
 
 	public override function create() {
 		super.create();
+		#if DEBUG_MENU
 		DebugMenu.instance.closeMenu();
 		DebugMenu.instance.floatingBtn.visible = Options.debugConsole;
+		#end
 
 		titleAlphabet = new Alphabet(0, 0, "WARNING", true);
 		titleAlphabet.screenCenter(X);

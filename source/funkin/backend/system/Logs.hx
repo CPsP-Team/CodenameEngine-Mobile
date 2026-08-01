@@ -141,7 +141,9 @@ class Logs {
 			fullHtmlLine += "<font color='#" + hexColor + "'>" + safeText + "</font>";
 		}
 		
+		#if DEBUG_MENU
 		DebugMenu.addHTMLLineToDebug(fullHtmlLine);
+		#end
 	}
 
 	public static function traceColored(text:Array<LogText>, level:Level = INFO)

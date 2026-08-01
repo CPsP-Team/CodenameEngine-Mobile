@@ -104,6 +104,7 @@
 
 	<!-- This is better thsn using #if mobile shit cuz this useful for multi port supported mods -->
 	<define name="ARKOSE_LEGACY_PORT"/>
+	<define name="DEBUG_MENU" unless="ios"/>
 
 	<!-- Comment this out to disable updates !-->
 	<!-- <define name="UPDATE_CHECKING" unless="web || hl || neko"/> -->
@@ -216,7 +217,6 @@
 	<haxedef name="lime_disable_motion_sensors" />
 
 	<section if="ios">
-		<haxedef name="SHARE_MOBILE_FILES" />
 		<config:ios category_type="public.app-category.music-games" />
 	</section>
 

@@ -92,7 +92,9 @@ class Main extends Sprite
 		#end
 		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
 
+		#if DEBUG_MENU
 		addChild(new DebugMenu());
+		#end
 	}
 
 	@:dox(hide)

@@ -31,7 +31,9 @@ import mobile.*;
 import mobile.flixel.controls.*;
 import mobile.flixel.screen.ScreenUtil;
 import mobile.backend.MobileUtil;
+#if DEBUG_MENU
 import mobile.DebugMenu;
+#end
 
 using StringTools;
 using funkin.backend.utils.CoolUtil;

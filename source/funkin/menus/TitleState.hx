@@ -29,8 +29,10 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+		#if DEBUG_MENU
 		DebugMenu.instance.closeMenu();
 		DebugMenu.instance.floatingBtn.visible = Options.debugConsole;
+		#end
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		MusicBeatState.skipTransIn = true;
