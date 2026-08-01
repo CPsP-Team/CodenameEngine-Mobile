@@ -25,6 +25,11 @@ class OptionsMenu extends TreeMenu {
 			state: AppearanceOptions
 		},
 		{
+			name: 'Mobile Options',
+			desc: 'Change Options related to Mobile Controls.',
+			state: MobileOptions
+		},
+		{
 			name: 'Miscellaneous >',
 			desc: 'Use this menu to reset save data or engine settings.',
 			state: MiscOptions
@@ -83,6 +88,10 @@ class OptionsMenu extends TreeMenu {
 			}
 		}
 
+		addDPad("UP_DOWN");
+		addButton("A_B");
+		addDPadCamera();
+		addButtonCamera();
 	}
 
 	public override function exit() {

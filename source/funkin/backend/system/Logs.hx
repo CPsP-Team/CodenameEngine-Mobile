@@ -5,6 +5,7 @@ import flixel.system.frontEnds.LogFrontEnd;
 import haxe.Log;
 import funkin.backend.utils.NativeAPI;
 import funkin.backend.utils.NativeAPI.ConsoleColor;
+import flixel.util.FlxColor;
 
 class Logs {
 	private static var __showing:Bool = false;
@@ -132,6 +133,15 @@ class Logs {
 		@:privateAccess
 		nativeTrace([for(t in text) t.text].join(""));
 		#end
+		var fullHtmlLine:String = "";
+		for (t in text) {
+			var hexColor = StringTools.hex(consoleColorToHex(t.color), 6);
+			while (hexColor.length < 6) hexColor = "0" + hexColor;			
+			var safeText = StringTools.htmlEscape(t.text); 			
+			fullHtmlLine += "<font color='#" + hexColor + "'>" + safeText + "</font>";
+		}
+		
+		DebugMenu.addHTMLLineToDebug(fullHtmlLine);
 	}
 
 	public static function traceColored(text:Array<LogText>, level:Level = INFO)
@@ -145,6 +155,29 @@ class Logs {
 			}
 		], level);
 	}
+
+	//used for DebugText
+	private static function consoleColorToHex(color:ConsoleColor):FlxColor {
+		return switch (color) {
+            case BLACK: FlxColor.BLACK;
+            case DARKBLUE: 0xFF000080;
+            case DARKGREEN: 0xFF008000;
+            case DARKCYAN: 0xFF008080;
+            case DARKRED: 0xFF800000;
+            case DARKMAGENTA: 0xFF800080;
+            case DARKYELLOW: 0xFF808000;
+            case LIGHTGRAY: 0xFFC0C0C0;
+            case GRAY: FlxColor.GRAY;
+            case BLUE: FlxColor.BLUE;
+            case GREEN: FlxColor.GREEN;
+            case CYAN: FlxColor.CYAN;
+            case RED: FlxColor.RED;
+            case MAGENTA: FlxColor.MAGENTA;
+            case YELLOW: FlxColor.YELLOW;
+            case WHITE: FlxColor.WHITE;
+            case NONE: FlxColor.TRANSPARENT;
+        }
+    }
 }
 
 enum abstract Level(Int) {

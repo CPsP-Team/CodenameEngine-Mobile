@@ -45,6 +45,11 @@ class CreditsMain extends TreeMenu {
 		main = new OptionsScreen('Credits', 'The people who made this possible!', items);
 		super.create();
 
+		addDPad("UP_DOWN");
+		addButton("A_B");
+		addDPadCamera();
+		addButtonCamera();
+
 		DiscordUtil.call("onMenuLoaded", ["Credits Menu"]);
 	}
 

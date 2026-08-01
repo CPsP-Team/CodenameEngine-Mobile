@@ -1,0 +1,104 @@
+{
+  "buttons": [
+    {
+      "name": "buttonS",
+      "id": "S",
+      "texture": "button_bg",
+      "position": [670, 600],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_s"
+      }
+    },
+    {
+      "name": "buttonY",
+      "id": "Y",
+      "texture": "button_bg",
+      "position": [560, 600],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_y"
+      }
+    },
+    {
+      "name": "buttonV",
+      "id": "V",
+      "texture": "button_bg",
+      "position": [450, 600],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_v"
+      }
+    },
+    {
+      "name": "buttonW",
+      "id": "W",
+      "texture": "button_bg",
+      "position": [670, 495],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_w"
+      }
+    },
+    {
+      "name": "buttonZ",
+      "id": "Z",
+      "texture": "button_bg",
+      "position": [560, 495],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_z"
+      }
+    },
+    {
+      "name": "buttonC",
+      "id": "C",
+      "texture": "button_bg",
+      "position": [450, 495],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_c"
+      }
+    },
+    {
+      "name": "buttonP",
+      "id": "P",
+      "texture": "button_bg",
+      "position": [670, 390],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_p"
+      }
+    },
+    {
+      "name": "button2",
+      "id": "2",
+      "texture": "button_bg",
+      "position": [560, 390],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_2"
+      }
+    },
+    {
+      "name": "button1",
+      "id": "1",
+      "texture": "button_bg",
+      "position": [450, 390],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_1"
+      }
+    },
+    {
+      "name": "buttonD",
+      "id": "D",
+      "texture": "button_bg",
+      "position": [670, 285],
+      "scale": 0.85,
+      "subgraphic": {
+        "texture": "icon_d"
+      }
+    }
+  ]
+}

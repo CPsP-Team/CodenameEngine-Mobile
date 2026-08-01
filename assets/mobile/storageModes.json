@@ -1,0 +1,16 @@
+{
+  "modes": [
+    {
+      "Name": "EXTERNAL_PE",
+      "Folder": "/storage/emulated/0/.PsychEngine"
+    },
+    {
+      "Name": "EXTERNAL_PEO",
+      "Folder": "/storage/emulated/0/.PsychOnline"
+    },
+    {
+      "Name": "EXTERNAL_JS",
+      "Folder": "/storage/emulated/0/.JSEngine"
+    }
+  ]
+}

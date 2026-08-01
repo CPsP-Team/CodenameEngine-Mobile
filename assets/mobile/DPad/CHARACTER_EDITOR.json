@@ -1,0 +1,18 @@
+{
+  "dpads": [
+    {
+      "name": "dpad1",
+      "id": ["UP", "DOWN", "LEFT", "RIGHT"],
+      "texture": "dpad_up",
+      "subgraphic": {
+        "texture": "dpad_down",
+        "position": [0, 100]
+      },
+      "offset": [[0, 0], [0, 100], [105, 0], [105, 100]],
+      "hitbox": [[100, 100], [100, 100], [100, 100], [100, 100]],
+      "showbounds": false,
+      "position": [5, 500],
+      "scale": 0.8
+    }
+  ]
+}

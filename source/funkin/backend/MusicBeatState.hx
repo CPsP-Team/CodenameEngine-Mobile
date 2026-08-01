@@ -15,6 +15,117 @@ import funkin.options.PlayerSettings;
 
 class MusicBeatState extends FlxState implements IBeatReceiver
 {
+	public static var instance:MusicBeatState;
+	public var mobileManager:MobileControls;
+	public function getMobilePadButton(name:String) {
+		return mobileManager.getButtonFromName(name);
+	}
+	public function mobileCJustPressed(buttons:Dynamic):Bool {
+		if (Std.isOfType(buttons, Array)) {
+			for (button in (buttons:Array<String>)) {
+				if (mobileManager.checkState(button, "justPressed"))
+					return true;
+			}
+		}
+		else if (Std.isOfType(buttons, String)) {
+			return mobileManager.checkState((buttons:String), "justPressed");
+		}
+		return false;
+	}
+	public function mobileCPressed(buttons:Dynamic):Bool {
+		if (Std.isOfType(buttons, Array)) {
+			for (button in (buttons:Array<String>)) {
+				if (mobileManager.checkState(button, "pressed"))
+					return true;
+			}
+		}
+		else if (Std.isOfType(buttons, String)) {
+			return mobileManager.checkState((buttons:String), "pressed");
+		}
+		return false;
+	}
+	public function mobileCJustReleased(buttons:Dynamic):Bool {
+		if (Std.isOfType(buttons, Array)) {
+			for (button in (buttons:Array<String>)) {
+				if (mobileManager.checkState(button, "justReleased"))
+					return true;
+			}
+		}
+		else if (Std.isOfType(buttons, String)) {
+			return mobileManager.checkState((buttons:String), "justReleased");
+		}
+		return false;
+	}
+	public function mobileCReleased(buttons:Dynamic):Bool {
+		if (Std.isOfType(buttons, Array)) {
+			for (button in (buttons:Array<String>)) {
+				if (mobileManager.checkState(button, "released"))
+					return true;
+			}
+		}
+		else if (Std.isOfType(buttons, String)) {
+			return mobileManager.checkState((buttons:String), "released");
+		}
+		return false;
+	}
+	/*
+	public function addMobilePad(DPad:String, Action:String) {
+		mobileManager.addDPad(DPad);
+		mobileManager.addButton(Action);
+	}
+	public function removeMobilePad() {
+		mobileManager.removeDPad();
+		mobileManager.removeButton();
+	}
+	public function addMobilePadCamera(defaultDrawTarget:Bool = false):Void {
+		mobileManager.addDPadCamera();
+		mobileManager.addButtonCamera();
+	}
+	*/
+	/* DPad */
+	public function addDPad(DPad:String) {
+		mobileManager.addDPad(DPad);
+	}
+	public function removeDPad() {
+		mobileManager.removeDPad();
+	}
+	public function addDPadCamera() {
+		mobileManager.addDPadCamera();
+	}
+
+	/* Button */
+	public function addButton(Action:String) {
+		mobileManager.addButton(Action);
+	}
+	public function removeButton() {
+		mobileManager.removeButton();
+	}
+	public function addButtonCamera() {
+		mobileManager.addButtonCamera();
+	}
+
+	/* Hitbox */
+	public function addHitbox(?mode:String = "Normal"):Void {
+		mobileManager.addHitbox(mode);
+	}
+	public function removeHitbox() {
+		mobileManager.removeHitbox();
+	}
+	public function addHitboxCamera(defaultDrawTarget:Bool = false):Void {
+		mobileManager.addHitboxCamera();
+	}
+
+	/* JoyStick */
+	public function addJoyStick(joy:String) {
+		mobileManager.addJoyStick(joy);
+	}
+	public function removeJoyStick() {
+		mobileManager.removeJoyStick();
+	}
+	public function addJoyStickCamera() {
+		mobileManager.addJoyStickCamera();
+	}
+
 	private var lastBeat:Float = 0;
 	private var lastStep:Float = 0;
 
@@ -110,6 +221,8 @@ class MusicBeatState extends FlxState implements IBeatReceiver
 
 	public function new(scriptsAllowed:Bool = true, ?scriptName:String) {
 		super();
+		mobileManager = new MobileControls();
+		mobileManager.antialiasing = true;
 		this.scriptsAllowed = #if SOFTCODED_STATES scriptsAllowed #else false #end;
 
 		if(lastStateName != (lastStateName = Type.getClassName(Type.getClass(this)))) {
@@ -159,9 +272,11 @@ class MusicBeatState extends FlxState implements IBeatReceiver
 	}
 	override function create()
 	{
+		instance = this;
 		loadScript();
 		Framerate.offset.y = 0;
 		super.create();
+		add(mobileManager);
 		call("create");
 	}
 
@@ -246,6 +361,8 @@ class MusicBeatState extends FlxState implements IBeatReceiver
 
 	public override function destroy() {
 		super.destroy();
+		if (mobileManager != null) mobileManager.destroy();
+		instance = null;
 		graphicCache.destroy();
 		call("destroy");
 		stateScripts = FlxDestroyUtil.destroy(stateScripts);

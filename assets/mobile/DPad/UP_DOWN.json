@@ -1,0 +1,24 @@
+{
+  "dpads": [
+    {
+      "name": "dpadUp",
+      "id": ["UP"],
+      "texture": "dpad_up",
+      "offset": [[0, 0]],
+      "hitbox": [[120, 120]],
+      "showbounds": false,
+      "position": [10, 480],
+      "scale": 0.9
+    },
+	{
+      "name": "dpadDown",
+      "id": ["DOWN"],
+      "texture": "dpad_down",
+      "offset": [[0, 0]],
+      "hitbox": [[120, 120]],
+      "showbounds": false,
+      "position": [10, 600],
+      "scale": 0.9
+    }
+  ]
+}

@@ -28,6 +28,8 @@ class MainMenuState extends MusicBeatState
 	var camFollow:FlxObject;
 	var versionText:FunkinText;
 
+	var devModeWarning:FunkinText;
+
 	public var canAccessDebugMenus:Bool = true;
 
 	override function create()
@@ -76,16 +78,29 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		versionText = new FunkinText(5, FlxG.height - 2, 0, 'Codename Engine v${Main.releaseVersion}\nCommit ${funkin.backend.system.macros.GitCommitMacro.commitNumber} (${funkin.backend.system.macros.GitCommitMacro.commitHash})\n[${controls.getKeyName(SWITCHMOD)}] Open Mods menu\n');
+		var modsKey:String = controls.mobileC ? "M" : controls.getKeyName(SWITCHMOD);
+		versionText = new FunkinText(5, FlxG.height - 2, 0, 'Codename Engine v${Main.releaseVersion}\nCommit ${funkin.backend.system.macros.GitCommitMacro.commitNumber} (${funkin.backend.system.macros.GitCommitMacro.commitHash})\n[${modsKey}] Open Mods menu\n');
 		versionText.y -= versionText.height;
 		versionText.scrollFactor.set();
 		add(versionText);
 
 		changeItem();
+
+		addDPad("UP_DOWN");
+		addButton("A_B_M_E");
+		addDPadCamera();
+		addButtonCamera();
+
+		devModeWarning = new FunkinText(0, FlxG.height - 50, 1280, "You have to set control alpha to 0 in the mobile settings!", 24);
+		devModeWarning.alignment = CENTER;
+		add(devModeWarning);
+		devModeWarning.scrollFactor.set();
+		devModeWarning.alpha = 0;
 	}
 
 	var selectedSomethin:Bool = false;
 	var forceCenterX:Bool = true;
+	var devModeCount:Int = 0;
 
 	override function update(elapsed:Float)
 	{
@@ -99,6 +114,16 @@ class MainMenuState extends MusicBeatState
 					persistentUpdate = false;
 					persistentDraw = true;
 					openSubState(new funkin.editors.EditorPicker());
+				} else if (mobileCJustPressed("DEV_ACCESS")) {
+					FlxG.sound.play(Paths.sound("editors/delete"));
+					if (devModeCount++ == 2) {
+						FlxTween.tween(devModeWarning, {alpha: 1}, 0.4);
+					}
+					FlxTween.completeTweensOf(devModeWarning);
+					FlxTween.color(devModeWarning, 0.2, 0xFFFF0000, 0xFFFFFFFF);
+					FlxTween.shake(devModeWarning, 0.005, 0.3);
+					devModeWarning.y = FlxG.height - 75;
+					FlxTween.tween(devModeWarning, {y: FlxG.height - 50}, 0.4);
 				}
 				/*
 				if (FlxG.keys.justPressed.SEVEN)
@@ -147,6 +172,16 @@ class MainMenuState extends MusicBeatState
 			});
 		}
 		return super.switchTo(nextState);
+	}
+
+	override function closeSubState() {
+		super.closeSubState();
+		removeDPad();
+		removeButton();
+		addDPad("UP_DOWN");
+		addButton("A_B_M_E");
+		addDPadCamera();
+		addButtonCamera();
 	}
 
 	function selectItem() {

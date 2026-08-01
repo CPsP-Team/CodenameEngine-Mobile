@@ -1,0 +1,114 @@
+{
+  "buttons": [
+    {
+      "name": "buttonA",
+      "id": "A",
+      "texture": "button_bg",
+      "position": [1150, 600],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_a",
+		"scale": 4
+      }
+    },
+    {
+      "name": "buttonB",
+      "id": "B",
+      "texture": "button_bg",
+      "position": [1045, 600],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_b",
+		"scale": 4
+      }
+    },
+    {
+      "name": "buttonC",
+      "id": "C",
+      "texture": "button_bg",
+      "position": [940, 600],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_c",
+		"scale": 4
+      }
+    },
+    {
+      "name": "buttonX",
+      "id": "X",
+      "texture": "button_bg",
+      "position": [1150, 495],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_x",
+		"scale": 4
+      }
+    },
+    {
+      "name": "buttonY",
+      "id": "Y",
+      "texture": "button_bg",
+      "position": [1045, 495],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_y",
+		"scale": 4
+      }
+    },
+    {
+      "name": "buttonZ",
+      "id": "Z",
+      "texture": "button_bg",
+      "position": [940, 495],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_z",
+		"scale": 4
+      }
+    },
+    {
+      "name": "buttonV",
+      "id": "V",
+      "texture": "button_bg",
+      "position": [1150, 390],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_v",
+		"scale": 4
+      }
+    },
+    {
+      "name": "buttonO",
+      "id": "O",
+      "texture": "button_bg",
+      "position": [1045, 390],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_o",
+		"scale": 4
+      }
+    },
+    {
+      "name": "buttonP",
+      "id": "P",
+      "texture": "button_bg",
+      "position": [940, 390],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_p",
+		"scale": 4
+      }
+    },
+    {
+      "name": "buttonD",
+      "id": "D",
+      "texture": "button_bg",
+      "position": [1150, 285],
+      "scale": 0.2125,
+      "subgraphic": {
+        "texture": "icon_d",
+		"scale": 4
+      }
+    }
+  ]
+}

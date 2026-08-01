@@ -113,6 +113,8 @@ class MainState extends FlxState {
 			betaWarningShown = true;
 		}
 
+		mobile.Config.init();
+
 		CoolUtil.safeAddAttributes('./.temp/', NativeAPI.FileAttribute.HIDDEN);
 	}
 }

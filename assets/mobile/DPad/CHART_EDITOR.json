@@ -1,0 +1,28 @@
+{
+  "dpads": [
+    {
+      "name": "dpad_main",
+      "id": ["UP", "DOWN", "LEFT", "RIGHT"],
+      "texture": "dpad_separate",
+      "offset": [[0, -70], [0, 70], [-70, 0], [70, 0]],
+      "hitbox": [[85, 85], [85, 85], [85, 85], [85, 85]],
+      "showbounds": false,
+      "position": [5, 500],
+      "scale": 0.85
+    },
+    {
+      "name": "dpad_secondary",
+      "id": ["UP2", "DOWN2"],
+      "texture": "dpad_up",
+      "subgraphic": {
+        "texture": "dpad_down",
+        "position": [0, 100]
+      },
+      "offset": [[0, 0], [0, 100]],
+      "hitbox": [[90, 90], [90, 90]],
+      "showbounds": false,
+      "position": [230, 525],
+      "scale": 0.7
+    }
+  ]
+}

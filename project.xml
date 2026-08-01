@@ -2,9 +2,9 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 	<app
-		title="Friday Night Funkin' - Codename Engine" main="funkin.backend.system.Main"
-		file="CodenameEngine" packageName="com.yoshman29.codenameengine"
-		package="com.yoshman29.codenameengine"
+		title="Codename Engine Legacy" main="funkin.backend.system.Main"
+		file="CodenameEngine" packageName="com.yoshman29.codenameenginelegacy"
+		package="com.yoshman29.codenameenginelegacy"
 		version="0.1.0-legacy" company="Yoshman29" />
 
 	<!--
@@ -102,6 +102,9 @@
 
 	<!-- _________________________________ Engine Settings _______________________________ -->
 
+	<!-- This is better thsn using #if mobile shit cuz this useful for multi port supported mods -->
+	<define name="ARKOSE_LEGACY_PORT"/>
+
 	<!-- Comment this out to disable updates !-->
 	<!-- <define name="UPDATE_CHECKING" unless="web || hl || neko"/> -->
 
@@ -190,6 +193,7 @@
 	<haxelib name="nape-haxe4" if="NAPE_ENABLED"/>
 
 	<haxelib name="hscript-improved" />
+	<haxelib name="mobile-controls" />
 	<haxelib name="hxdiscord_rpc" if="DISCORD_RPC"/>
 	<haxelib name="markdown" />
 
@@ -201,6 +205,20 @@
 	</section>
 
 	<haxeflag name="--macro" value="funkin.backend.system.macros.Macros.initMacros()" />
+
+	<!-- It's cool to see -->
+	<icon path="art/teaser.png" if="mobile" />
+
+	<!-- Do whatever you want I'm tired uninstall and install everytime -->
+	<certificate path="key.keystore" password="psychengine" alias="psychport" alias-password="psychengine" if="android" unless="debug" />
+
+	<haxedef name="lime_use_old_deltatime" />
+	<haxedef name="lime_disable_motion_sensors" />
+
+	<section if="ios">
+		<haxedef name="SHARE_MOBILE_FILES" />
+		<config:ios category_type="public.app-category.music-games" />
+	</section>
 
 	<!-- Fix compiling issues -->
 	<setenv name="HAXEPATH" value="./"/>

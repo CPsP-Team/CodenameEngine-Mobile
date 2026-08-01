@@ -1,0 +1,108 @@
+name: iOS Build
+on:
+  workflow_dispatch:
+  workflow_call:
+env: 
+  PROJECT_NAME: CodenameEngine
+jobs:
+  build:
+    name: iOS Build
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+
+      - name: Setting up Haxe
+        uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: 4.3.7
+      - name: Restore Previous Cache
+        uses: actions/cache@v4
+        with:
+          # not caching the bin folder to prevent asset duplication and stuff like that
+          key: cache-build-ios
+          path: |
+            ~/.gradle
+            .haxelib/
+            /home/runner/haxelib/
+            /Users/runner/haxelib/
+            C:/hostedtoolcache/windows/haxe/4.3.6/x64/lib/
+            ~/.haxelib/
+            export/release/android/haxe/
+            export/release/android/obj/
+            export/release/ios/${{ env.PROJECT_NAME }}/haxe/
+            export/release/ios/${{ env.PROJECT_NAME }}/obj/
+            export\release\windows\haxe\
+            export\release\windows\obj\
+            .haxelib\
+          restore-keys: |
+            cache-build-ios
+      - name: Installing/Updating libraries
+        run: |
+          haxe -cp commandline -D analyzer-optimize --run Main setup -s
+      - name: Fix Haxelib
+        run: |
+          haxelib set lime git
+          haxelib set hxcpp git
+          haxelib set flixel git
+          haxelib set flixel-addons git
+          haxelib set flxanimate git
+          haxelib set hxdiscord_rpc git
+      - name: Building the game
+        run: |
+          haxelib run lime build ios -nosign -final
+
+      - name: Make Ipa
+        run: |
+          cd export/release/ios/build/Release-iphoneos
+          mkdir Payload
+          mv *.app Payload
+          zip -r ${{ env.PROJECT_NAME }}.ipa Payload
+          
+      - name: Uploading artifact (entire build)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Codename Engine iOS
+          path: export/release/ios/build/Release-iphoneos/*
+      - name: Clear Previous Cache
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const caches = await github.rest.actions.getActionsCacheList({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            })
+            for (const cache of caches.data.actions_caches) {
+              if (cache.key == "cache-build-ios") {
+                console.log('Clearing ' + cache.key + '...')
+                await github.rest.actions.deleteActionsCacheById({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  cache_id: cache.id,
+                })
+                console.log("Cache cleared.")
+              }
+            }
+      - name: Upload New Cache
+        uses: actions/cache@v4
+        with:
+          # caching again since for some reason it doesnt work with the first post cache shit
+          key: cache-build-ios
+          path: |
+            ~/.gradle
+            .haxelib/
+            /home/runner/haxelib/
+            /Users/runner/haxelib/
+            C:/hostedtoolcache/windows/haxe/4.3.6/x64/lib/
+            ~/.haxelib/
+            export/release/android/haxe/
+            export/release/android/obj/
+            export/release/ios/${{ env.PROJECT_NAME }}/haxe/
+            export/release/ios/${{ env.PROJECT_NAME }}/obj/
+            export\release\windows\haxe\
+            export\release\windows\obj\
+            .haxelib\
+          restore-keys: |
+            cache-build-ios

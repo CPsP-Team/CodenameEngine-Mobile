@@ -1,0 +1,21 @@
+{
+  "joysticks": [
+    {
+      "name": "joycon1",
+      "radius": 80,
+      "id": ["UP", "DOWN", "LEFT", "RIGHT"],
+      "texture": "joystick_polygon_pad_a",
+      "offset": [[0, -100], [0, 100], [-100, 0], [100, 0]],
+      "hitbox": [[200, 80], [200, 80], [80, 200], [80, 200]],
+      "position": [0, 300],
+      "showbounds": false,
+      "scale": 1,
+      "color": null,
+      "subgraphic": {
+        "texture": "joystick_polygon_nub_a",
+        "position": [0, 0],
+        "scale": 1
+      }
+    }
+  ]
+}

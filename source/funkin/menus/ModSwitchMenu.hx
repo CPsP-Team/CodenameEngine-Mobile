@@ -34,6 +34,12 @@ class ModSwitchMenu extends MusicBeatSubstate {
 		}
 		add(alphabets);
 		changeSelection(0, true);
+
+		controls.isInSubstate = true;
+		addDPad("UP_DOWN");
+		addButton("A_B");
+		addDPadCamera();
+		addButtonCamera();
 	}
 
 	public override function update(elapsed:Float) {

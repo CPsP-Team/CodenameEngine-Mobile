@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<libraries>
+	<!-- Mobile Controls Library -->
+	<git name="mobile-controls" url="https://github.com/ArkoseLabsOfficial/mobile-controls"/>
+
+	<!-- OpenFL & Lime (Required for Flixel) -->
+	<lib name="openfl" version="9.2.2" />
+	<git name="lime" url="https://github.com/ArkoseLabsOfficial/lime"/>
+
+	<!-- Flixel -->
+	<git name="flixel" url="https://github.com/CodenameCrew/cne-flixel" />
+	<git name="flixel-addons" url="https://github.com/CodenameCrew/cne-flixel-addons" />
+
+	<!-- Other Libraries -->
+	<git name="hscript-improved" url="https://github.com/CodenameCrew/hscript-improved" ref="custom-classes" />
+	<git name="flxanimate" url="https://github.com/CodenameCrew/cne-flxanimate" />
+	<git name="hxdiscord_rpc" url="https://github.com/CodenameCrew/cne-hxdiscord_rpc" />
+	<lib name="hxvlc" version="1.9.3" skipDeps="true" />
+
+	<!-- Documentation and other features -->
+	<git name="away3d" url="https://github.com/CodenameCrew/away3d" />
+	<!-- <lib name="dox" /> -->
+	<lib name="format" />
+	<lib name="markdown" />
+	<lib name="nape-haxe4" />
+</libraries>

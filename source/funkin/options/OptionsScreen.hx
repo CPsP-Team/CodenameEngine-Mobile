@@ -14,11 +14,38 @@ class OptionsScreen extends FlxTypedSpriteGroup<OptionType> {
 
 	public var name:String;
 	public var desc:String;
+	public var prevMenuMPadModes:Array<String> = [];
 
-	public function new(name:String, desc:String, ?options:Array<OptionType>) {
+	public function new(name:String, desc:String, ?options:Array<OptionType>, ?menuMPadModes:Array<String>) {
 		super();
 		this.name = name;
 		this.desc = desc;
+
+		//fix custom controls
+		if (menuMPadModes == null) {
+			final state = MusicBeatState.instance;
+			this.prevMenuMPadModes = ["UP_DOWN", "A_B"];
+			state.addDPad("FULL");
+			state.addButton("A_B");
+			state.addDPadCamera();
+			state.addButtonCamera();
+		}
+
+		if (menuMPadModes != null)
+		{
+			final state = MusicBeatState.instance;
+			if (state != null && state.mobileManager != null) {
+				this.prevMenuMPadModes = [state.mobileManager.curDPadMode, state.mobileManager.curActionMode];
+				state.removeDPad();
+				state.removeButton();
+
+				state.addDPad(menuMPadModes[0]);
+				state.addButton(menuMPadModes[1]);
+				state.addDPadCamera();
+				state.addButtonCamera();
+			}
+		}
+
 		if (options != null) for(o in options) add(o);
 	}
 
@@ -45,7 +72,7 @@ class OptionsScreen extends FlxTypedSpriteGroup<OptionType> {
 
 		if (members.length > 0) {
 			members[curSelected].selected = true;
-			if (controls.ACCEPT || (FlxG.mouse.justReleased && Main.timeSinceFocus > 0.25))
+			if (controls.ACCEPT || (FlxG.mouse.justReleased && !funkin.backend.system.Controls.instance.mobileC && Main.timeSinceFocus > 0.25))
 				members[curSelected].onSelect();
 			if (controls.LEFT_P)
 				members[curSelected].onChangeSelection(-1);
@@ -58,6 +85,20 @@ class OptionsScreen extends FlxTypedSpriteGroup<OptionType> {
 
 	public function close() {
 		onClose(this);
+
+		if (prevMenuMPadModes.length > 0)
+		{
+			final state = MusicBeatState.instance;
+			if (state != null && state.mobileManager != null) {
+				state.removeDPad();
+				state.removeButton();
+				state.addDPad(prevMenuMPadModes[0]);
+				state.addButton(prevMenuMPadModes[1]);
+				state.addDPadCamera();
+				state.addButtonCamera();
+			}
+			
+		}
 	}
 
 	public function changeSelection(sel:Int, force:Bool = false) {

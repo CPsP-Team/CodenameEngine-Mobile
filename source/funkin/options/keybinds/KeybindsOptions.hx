@@ -162,6 +162,9 @@ class KeybindsOptions extends MusicBeatSubstate {
 		}
 		add(alphabets);
 		add(camFollow);
+
+		addButton("B");
+		addButtonCamera();
 	}
 
 	public override function destroy() {

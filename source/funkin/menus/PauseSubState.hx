@@ -50,6 +50,9 @@ class PauseSubState extends MusicBeatSubstate
 		if (menuItems.contains("Exit to charter") && !PlayState.chartingMode)
 			menuItems.remove("Exit to charter");
 
+		if (controls.mobileC)
+			menuItems.remove("Change Controls");
+
 		add(parentDisabler = new FunkinParentDisabler());
 
 		pauseScript = Script.create(Paths.script(script));
@@ -107,6 +110,11 @@ class PauseSubState extends MusicBeatSubstate
 		camera = new FlxCamera();
 		camera.bgColor = 0;
 		FlxG.cameras.add(camera, false);
+
+		addDPad("UP_DOWN");
+		addButton("A");
+		addDPadCamera();
+		addButtonCamera();
 
 		pauseScript.call("postCreate");
 
@@ -188,6 +196,17 @@ class PauseSubState extends MusicBeatSubstate
 			}
 
 		super.destroy();
+	}
+
+	override function closeSubState() {
+		persistentUpdate = true;
+		super.closeSubState();
+		removeDPad();
+		removeButton();
+		addDPad("UP_DOWN");
+		addButton("A");
+		addDPadCamera();
+		addButtonCamera();
 	}
 
 	function changeSelection(change:Int = 0):Void

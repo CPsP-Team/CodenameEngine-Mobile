@@ -1,0 +1,14 @@
+{
+  "dpads": [
+    {
+      "name": "dpad1",
+      "id": ["UP", "DOWN", "LEFT", "RIGHT"],
+      "texture": "dpad_separate",
+      "offset": [[0, -83], [0, 83], [-83, 0], [83, 0]],
+      "hitbox": [[100, 100], [100, 100], [100, 100], [100, 100]],
+      "showbounds": false,
+      "position": [10, 467],
+      "scale": 1.0
+    }
+  ]
+}

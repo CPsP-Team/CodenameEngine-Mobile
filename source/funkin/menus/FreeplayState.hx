@@ -170,6 +170,11 @@ class FreeplayState extends MusicBeatState
 
 		add(scoreText);
 
+		addDPad("FULL");
+		addButton("A_B_X_Y");
+		addDPadCamera();
+		addButtonCamera();
+
 		changeSelection(0, true);
 		changeDiff(0, true);
 		changeCoopMode(0, true);
@@ -221,7 +226,7 @@ class FreeplayState extends MusicBeatState
 		if (canSelect) {
 			changeSelection((controls.UP_P ? -1 : 0) + (controls.DOWN_P ? 1 : 0) - FlxG.mouse.wheel);
 			changeDiff((controls.LEFT_P ? -1 : 0) + (controls.RIGHT_P ? 1 : 0));
-			changeCoopMode((FlxG.keys.justPressed.TAB ? 1 : 0));
+			changeCoopMode(((FlxG.keys.justPressed.TAB || mobileCJustPressed("X")) ? 1 : 0));
 			// putting it before so that its actually smooth
 			updateOptionsAlpha();
 		}
@@ -263,7 +268,7 @@ class FreeplayState extends MusicBeatState
 		}
 
 		#if sys
-		if (FlxG.keys.justPressed.EIGHT && Sys.args().contains("-livereload"))
+		if (FlxG.keys.justPressed.EIGHT && Sys.args().contains("-livereload") || mobileCJustPressed("Y"))
 			convertChart();
 		#end
 
@@ -354,10 +359,10 @@ class FreeplayState extends MusicBeatState
 	 * Array containing all labels for Co-Op / Opponent modes.
 	 */
 	public var coopLabels:Array<String> = [
-		"[TAB] Solo",
-		"[TAB] Opponent Mode",
-		"[TAB] Co-Op Mode",
-		"[TAB] Co-Op Mode (Switched)"
+		" Solo",
+		" Opponent Mode",
+		" Co-Op Mode",
+		" Co-Op Mode (Switched)"
 	];
 
 	/**
@@ -378,10 +383,16 @@ class FreeplayState extends MusicBeatState
 
 		updateScore();
 
+		var coopBind:String = "[TAB]";
+		if (controls.mobileC)
+		{
+			if (getMobilePadButton("buttonX") != null)
+				coopBind = "[X]";
+		}
 		if (bothEnabled) {
-			coopText.text = coopLabels[curCoopMode];
+			coopText.text = coopBind + coopLabels[curCoopMode];
 		} else {
-			coopText.text = coopLabels[curCoopMode * (songs[curSelected].coopAllowed ? 2 : 1)];
+			coopText.text = coopBind + coopLabels[curCoopMode * (songs[curSelected].coopAllowed ? 2 : 1)];
 		}
 	}
 

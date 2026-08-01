@@ -1,0 +1,15 @@
+{
+  "buttons": [
+    {
+      "name": "buttonA",
+      "id": "A",
+      "texture": "button_bg",
+      "position": [1153, 593],
+      "scale": 0.24,
+	  "subgraphic": {
+		"texture": "icon_a",
+		"scale": 4
+	  }
+    }
+  ]
+}

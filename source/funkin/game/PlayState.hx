@@ -781,6 +781,9 @@ class PlayState extends MusicBeatState
 			e.cameras = [camHUD];
 		#end
 
+		addButton("P");
+		addButtonCamera();
+
 		startingSong = true;
 
 		super.create();
@@ -819,6 +822,11 @@ class PlayState extends MusicBeatState
 			updateIconPositions();
 
 		__updateNote_event = EventManager.get(NoteUpdateEvent);
+
+		if (mobileManager != null) {
+				addHitboxCamera();
+				addButtonCamera();
+		}
 
 		scripts.call("postCreate");
 	}
@@ -950,6 +958,21 @@ class PlayState extends MusicBeatState
 
 	@:dox(hide) function startSong():Void
 	{
+		var ek:String = " EK " + Options.extraButtons;
+		var eks:String = " EKS " + Options.extraButtons;
+		var extraKeyString = "";
+
+		if (mobile.Config.Hitboxes.exists(Options.hitboxMode + eks) && Options.hitboxPos)
+			extraKeyString = eks;
+		else if (mobile.Config.Hitboxes.exists(Options.hitboxMode + ek))
+			extraKeyString = ek;
+
+		addHitbox(Options.hitboxMode + extraKeyString);
+		addHitboxCamera();
+		for (hitbox in mobileManager.hitboxes) {
+			if (getMobilePadButton("pause") != null)
+				hitbox.deadZones.push(getMobilePadButton("pause"));
+		}
 		scripts.call("onSongStart");
 		startingSong = false;
 
@@ -1517,6 +1540,9 @@ class PlayState extends MusicBeatState
 	{
 		endingSong = true;
 		scripts.call("onSongEnd");
+		for (hitbox in mobileManager.hitboxes) {
+			hitbox.visible = false;
+		}
 		canPause = false;
 		inst.volume = 0;
 		vocals.volume = 0;
@@ -1557,6 +1583,9 @@ class PlayState extends MusicBeatState
 	 * Immediately switches to the next song, or goes back to the Story/Freeplay menu.
 	 */
 	public function nextSong() {
+		for (hitbox in mobileManager.hitboxes) {
+			hitbox.visible = false;
+		}
 		if (isStoryMode)
 		{
 			campaignScore += songScore;
