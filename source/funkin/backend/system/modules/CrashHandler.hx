@@ -53,6 +53,18 @@ class CrashHandler {
 		e.stopPropagation();
 		e.stopImmediatePropagation();
 
+		#if sys
+		try
+		{
+			if (!FileSystem.exists('crash'))
+				FileSystem.createDirectory('crash');
+
+			File.saveContent('crash/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', '$m\n$stackLabel');
+		}
+		catch (e:haxe.Exception)
+			trace('Couldn\'t save error message. (${e.message})');
+		#end
+
 		NativeAPI.showMessageBox("Codename Engine Crash Handler", 'Uncaught Error:$m\n\n$stackLabel', MSG_ERROR);
 		#if sys
 		Sys.exit(1);
