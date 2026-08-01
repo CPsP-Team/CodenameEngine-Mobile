@@ -8,13 +8,13 @@
 	<git name="lime" url="https://github.com/ArkoseLabsOfficial/lime"/>
 
 	<!-- Flixel -->
-	<git name="flixel" url="https://github.com/CodenameCrew/cne-flixel" />
-	<git name="flixel-addons" url="https://github.com/CodenameCrew/cne-flixel-addons" />
+	<git name="flixel" url="https://github.com/CodenameCrew/cne-flixel" ref="old" />
+	<git name="flixel-addons" url="https://github.com/CodenameCrew/cne-flixel-addons" ref="old" />
 
 	<!-- Other Libraries -->
 	<git name="hscript-improved" url="https://github.com/CodenameCrew/hscript-improved" ref="custom-classes" />
 	<git name="flxanimate" url="https://github.com/CodenameCrew/cne-flxanimate" />
-	<git name="hxdiscord_rpc" url="https://github.com/CodenameCrew/cne-hxdiscord_rpc" />
+	<git name="hxdiscord_rpc" url="https://github.com/CodenameCrew/cne-hxdiscord_rpc" ref="old" skipDeps="true" />
 	<lib name="hxvlc" version="1.9.3" skipDeps="true" />
 
 	<!-- Documentation and other features -->
