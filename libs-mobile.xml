@@ -24,4 +24,5 @@
 	<lib name="markdown" />
 	<lib name="nape-haxe4" />
 	<git name="openfl" url="https://github.com/CodenameCrew/cne-openfl" ref="old" />
+	<git name="hxcpp" url="https://github.com/CodenameCrew/cne-hxcpp" ref="old" />
 </libraries>
