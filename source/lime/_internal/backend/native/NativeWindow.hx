@@ -187,7 +187,7 @@ class NativeWindow
 	{
 		if (handle != null)
 		{
-			#if (!macro && lime_cffi)
+			#if !macro
 			NativeCFFI.lime_window_alert(handle, message, title);
 			#end
 		}

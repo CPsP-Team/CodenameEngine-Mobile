@@ -25,12 +25,12 @@ class MainState extends FlxState {
 	public override function create() {
 		super.create();
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test8", "test");
+		NativeAPI.showMessageBox("test8", "test");
 		#end
 		if (!initiated)
 			Main.loadGameSettings();
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test9", "test");
+		NativeAPI.showMessageBox("test9", "test");
 		#end
 		initiated = true;
 
@@ -38,25 +38,25 @@ class MainState extends FlxState {
 		CoolUtil.deleteFolder('./.temp/'); // delete temp folder
 		#end
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test10", "test");
+		NativeAPI.showMessageBox("test10", "test");
 		#end
 		Options.save();
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test11", "test");
+		NativeAPI.showMessageBox("test11", "test");
 		#end
 
 		FlxG.bitmap.reset();
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test12", "test");
+		NativeAPI.showMessageBox("test12", "test");
 		#end
 		FlxG.sound.destroy(true);
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test13", "test");
+		NativeAPI.showMessageBox("test13", "test");
 		#end
 
 		Paths.assetsTree.reset();
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test14", "test");
+		NativeAPI.showMessageBox("test14", "test");
 		#end
 
 		#if MOD_SUPPORT
@@ -74,7 +74,7 @@ class MainState extends FlxState {
 		var _noPriorityAddons:Array<AddonInfo> = [];
 
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test15", "test");
+		NativeAPI.showMessageBox("test15", "test");
 		#end
 
 		var addonPaths = [
@@ -87,7 +87,7 @@ class MainState extends FlxState {
 		];
 
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test16", "test");
+		NativeAPI.showMessageBox("test16", "test");
 		#end
 
 		for(path in addonPaths) {
@@ -116,35 +116,35 @@ class MainState extends FlxState {
 		}
 
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test17", "test");
+		NativeAPI.showMessageBox("test17", "test");
 		#end
 
 		for (addon in _lowPriorityAddons)
 			loadLib(addon.path, ltrim(addon.name, "[LOW]"));
 
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test18", "test");
+		NativeAPI.showMessageBox("test18", "test");
 		#end
 
 		if (ModsFolder.currentModFolder != null)
 			loadLib(ModsFolder.modsPath + ModsFolder.currentModFolder, ModsFolder.currentModFolder);
 
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test19", "test");
+		NativeAPI.showMessageBox("test19", "test");
 		#end
 
 		for (addon in _noPriorityAddons)
 			loadLib(addon.path, addon.name);
 
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test20", "test");
+		NativeAPI.showMessageBox("test20", "test");
 		#end
 
 		for (addon in _highPriorityAddons)
 			loadLib(addon.path, ltrim(addon.name, "[HIGH]"));
 
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test21", "test");
+		NativeAPI.showMessageBox("test21", "test");
 		#end
 
 		#end
@@ -152,19 +152,19 @@ class MainState extends FlxState {
 		MusicBeatTransition.script = "";
 		Main.refreshAssets();
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test22", "test");
+		NativeAPI.showMessageBox("test22", "test");
 		#end
 		ModsFolder.onModSwitch.dispatch(ModsFolder.currentModFolder);
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test23", "test");
+		NativeAPI.showMessageBox("test23", "test");
 		#end
 		DiscordUtil.init();
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test24", "test");
+		NativeAPI.showMessageBox("test24", "test");
 		#end
 		EventsData.reloadEvents();
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test25", "test");
+		NativeAPI.showMessageBox("test25", "test");
 		#end
 		TitleState.initialized = false;
 
@@ -175,19 +175,19 @@ class MainState extends FlxState {
 			betaWarningShown = true;
 		}
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test26", "test");
+		NativeAPI.showMessageBox("test26", "test");
 		#end
 
 		mobile.Config.init();
 
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test27", "test");
+		NativeAPI.showMessageBox("test27", "test");
 		#end
 
 		CoolUtil.safeAddAttributes('./.temp/', NativeAPI.FileAttribute.HIDDEN);
 
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test28", "test");
+		NativeAPI.showMessageBox("test28", "test");
 		#end
 	}
 }

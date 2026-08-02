@@ -172,7 +172,8 @@ class NativeAPI {
 		#if windows
 		Windows.showMessageBox(caption, message, icon);
 		#else
-		lime.app.Application.current.window.alert(message, caption);
+		FlxG.stage.window.alert(message, caption);
+		//lime.app.Application.current.window.alert(message, caption);
 		#end
 	}
 

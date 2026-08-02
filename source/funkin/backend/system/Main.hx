@@ -80,29 +80,29 @@ class Main extends Sprite
 		MobileUtil.initDirectory();
 		#end
 		#if SHOW_TEST
-		Application.current.window.alert("test1", "test");
+		NativeAPI.showMessageBox("test1", "test");
 		#end
 		Sys.setCwd(MobileUtil.getAssetDirectory());
 		#if SHOW_TEST
-		Application.current.window.alert("test2", "test");
+		NativeAPI.showMessageBox("test2", "test");
 		#end
 		//Sys.setCwd(haxe.io.Path.addTrailingSlash(MobileUtil.getDirectory()));
 		MobileUtil.copyAssets();
 		#if SHOW_TEST
-		Application.current.window.alert("test3", "test");
+		NativeAPI.showMessageBox("test3", "test");
 		#end
 		#end
 		#if SHOW_TEST
-		Application.current.window.alert("test4", "test");
+		NativeAPI.showMessageBox("test4", "test");
 		#end
 		CrashHandler.init();
 		#if SHOW_TEST
-		Application.current.window.alert("test5", "test");
+		NativeAPI.showMessageBox("test5", "test");
 		#end
 
 		addChild(game = new FunkinGame(gameWidth, gameHeight, MainState, Options.framerate, Options.framerate, skipSplash, startFullscreen));
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test6", "test");
+		NativeAPI.showMessageBox("test6", "test");
 		#end
 
 		#if (!web)
@@ -110,7 +110,7 @@ class Main extends Sprite
 		SystemInfo.init();
 		#end
 		#if SHOW_TEST
-		lime.app.Application.current.window.alert("test7", "test");
+		NativeAPI.showMessageBox("test7", "test");
 		#end
 		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
 
