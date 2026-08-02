@@ -31,7 +31,7 @@ jobs:
           haxelib git hxcpp https://github.com/Ethantobot11/cne-hxcpp old
       - name: Building the game
         run: |
-          haxelib run lime build ios -nosign -simulator
+          haxelib run lime build ios -nosign -simulator -ONLY_X86_64
 
       - name: Make Ipa
         run: |
