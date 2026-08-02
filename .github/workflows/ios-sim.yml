@@ -1,0 +1,47 @@
+name: iOS Sim Build
+on: workflow_dispatch
+env: 
+  PROJECT_NAME: CodenameEngine
+jobs:
+  build:
+    name: iOS Build
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Setting up Haxe
+        uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: 4.3.7
+          restore-keys: |
+            cache-build-ios
+      - name: Installing/Updating libraries
+        run: |
+          haxe -cp commandline -D analyzer-optimize --run Main setup -s
+      - name: Fix Haxelib
+        run: |
+          haxelib set lime git
+          haxelib set hxcpp git
+          haxelib set flixel git
+          haxelib set flixel-addons git
+          haxelib set flixel-animate git
+          haxelib set hxdiscord_rpc git
+          haxelib remove hxcpp
+          haxelib git hxcpp https://github.com/Ethantobot11/cne-hxcpp old
+      - name: Building the game
+        run: |
+          haxelib run lime build ios -nosign -simulator
+
+      - name: Make Ipa
+        run: |
+          cd export/release/ios/build/Release-iphoneos
+          mkdir Payload
+          mv *.app Payload
+          zip -r ${{ env.PROJECT_NAME }}.ipa Payload
+          
+      - name: Uploading artifact (entire build)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Codename Engine iOS
+          path: export/release/ios/build/Release-iphoneos/*
