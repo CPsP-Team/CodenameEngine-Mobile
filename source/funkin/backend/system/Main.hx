@@ -16,6 +16,7 @@ import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import funkin.backend.system.modules.*;
+import lime.app.Application;
 
 #if ALLOW_MULTITHREADING
 import sys.thread.Thread;
@@ -78,17 +79,38 @@ class Main extends Sprite
 		MobileUtil.getPermissions();
 		MobileUtil.initDirectory();
 		#end
+		#if SHOW_TEST
+		Application.current.window.alert("test1", "test");
+		#end
 		Sys.setCwd(MobileUtil.getAssetDirectory());
+		#if SHOW_TEST
+		Application.current.window.alert("test2", "test");
+		#end
 		//Sys.setCwd(haxe.io.Path.addTrailingSlash(MobileUtil.getDirectory()));
 		MobileUtil.copyAssets();
+		#if SHOW_TEST
+		Application.current.window.alert("test3", "test");
+		#end
+		#end
+		#if SHOW_TEST
+		Application.current.window.alert("test4", "test");
 		#end
 		CrashHandler.init();
+		#if SHOW_TEST
+		Application.current.window.alert("test5", "test");
+		#end
 
 		addChild(game = new FunkinGame(gameWidth, gameHeight, MainState, Options.framerate, Options.framerate, skipSplash, startFullscreen));
+		#if SHOW_TEST
+		lime.app.Application.current.window.alert("test6", "test");
+		#end
 
 		#if (!web)
 		addChild(framerateSprite = new funkin.backend.system.framerate.Framerate());
 		SystemInfo.init();
+		#end
+		#if SHOW_TEST
+		lime.app.Application.current.window.alert("test7", "test");
 		#end
 		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
 
