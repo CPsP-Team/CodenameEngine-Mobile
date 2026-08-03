@@ -226,7 +226,7 @@ class Main extends Sprite
 			#if SHOW_TEST
 			NativeAPI.showMessageBox("loadGame16", "test");
 			#end
-			Paths.assetsTree.__defaultLibraries.push(ModsFolder.loadLibraryFromFolder('assets', './assets/', true));
+			Paths.assetsTree.__defaultLibraries.push(ModsFolder.loadLibraryFromFolder('assets', #if mobile MobileUtil.getAssetDirectory() + #end "assets/", true));
 			#if SHOW_TEST
 			NativeAPI.showMessageBox("loadGame17", "test");
 			#end
