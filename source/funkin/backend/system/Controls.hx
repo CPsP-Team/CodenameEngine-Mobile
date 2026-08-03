@@ -908,7 +908,6 @@ class Controls extends FlxActionSet
 	@:nullSafety(Off)
 	public function checkMobile(buttonName:String, ?type:String):Bool
 	{
-		#if !ios
 		if (mobileC) {
 			var upperName:String = buttonName.toUpperCase();
 			var keyMap:Array<String> = [upperName];
@@ -954,7 +953,6 @@ class Controls extends FlxActionSet
 					if (justP == true) return justP;
 			}
 		}
-		#end
 		return false;
 	}
 
