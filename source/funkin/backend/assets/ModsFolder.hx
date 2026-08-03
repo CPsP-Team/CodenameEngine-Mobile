@@ -54,6 +54,11 @@ class ModsFolder {
 	 * Initialises `mods` folder.
 	 */
 	public static function init() {
+		#if ios_fix
+		if (!FileSystem.exists(modsPath)) FileSystem.createDirectory(modsPath);
+		if (!FileSystem.exists(addonsPath)) FileSystem.createDirectory(addonsPath);
+		#end
+
 		if(!getModsList().contains(Options.lastLoadedMod))
 			Options.lastLoadedMod = null;
 	}

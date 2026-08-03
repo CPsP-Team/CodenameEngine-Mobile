@@ -349,7 +349,6 @@ class CoolUtil
 	@:noUsing public static function playMenuSong(fadeIn:Bool = false) {
 		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
 		{
-			trace(Paths.music('freakyMenu'));
 			playMusic(Paths.music('freakyMenu'), true, fadeIn ? 0 : 1, true, 102);
 			FlxG.sound.music.persist = true;
 			if (fadeIn)

@@ -16,7 +16,6 @@ import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import funkin.backend.system.modules.*;
-import lime.app.Application;
 
 #if ALLOW_MULTITHREADING
 import sys.thread.Thread;
@@ -79,38 +78,17 @@ class Main extends Sprite
 		MobileUtil.getPermissions();
 		MobileUtil.initDirectory();
 		#end
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("test1", "test");
-		#end
 		Sys.setCwd(MobileUtil.getAssetDirectory());
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("test2", "test");
-		#end
 		//Sys.setCwd(haxe.io.Path.addTrailingSlash(MobileUtil.getDirectory()));
-		#if android MobileUtil.copyAssets(); #end
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("test3", "test");
-		#end
-		#end
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("test4", "test");
+		MobileUtil.copyAssets();
 		#end
 		CrashHandler.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("test5", "test");
-		#end
 
 		addChild(game = new FunkinGame(gameWidth, gameHeight, MainState, Options.framerate, Options.framerate, skipSplash, startFullscreen));
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("test6", "test");
-		#end
 
 		#if (!web)
 		addChild(framerateSprite = new funkin.backend.system.framerate.Framerate());
 		SystemInfo.init();
-		#end
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("test7", "test");
 		#end
 		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
 
@@ -148,173 +126,68 @@ class Main extends Sprite
 	}
 
 	public static function loadGameSettings() {
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame0", "test");
-		#end
 		WindowUtils.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame1", "test");
-		#end
 		SaveWarning.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame2", "test");
-		#end
 		MemoryUtil.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame3", "test");
-		#end
 		@:privateAccess
 		FlxG.game.getTimer = getTimer;
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame4", "test");
-		#end
 		#if ALLOW_MULTITHREADING
 		for(i in 0...4)
 			gameThreads.push(Thread.createWithEventLoop(function() {Thread.current().events.promise();}));
 		#end
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame5", "test");
-		#end
 		FunkinCache.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame6", "test");
-		#end
 		Paths.assetsTree = new AssetsLibraryList();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame7", "test");
-		#end
 
 		#if UPDATE_CHECKING
 		funkin.backend.system.updating.UpdateUtil.init();
 		#end
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame8", "test");
-		#end
 		ShaderResizeFix.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame9", "test");
-		#end
 		Logs.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame10", "test");
-		#end
 		Paths.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame11", "test");
-		#end
 		#if GLOBAL_SCRIPT
 		funkin.backend.scripting.GlobalScript.init();
 		#end
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame12", "test");
-		#end
 
 		#if (sys && TEST_BUILD)
-			#if SHOW_TEST
-			NativeAPI.showMessageBox("loadGame13", "test");
-			#end
 			trace("Used cne test / cne build. Switching into source assets.");
 			#if MOD_SUPPORT
 				ModsFolder.modsPath = './${pathBack}mods/';
 				ModsFolder.addonsPath = './${pathBack}addons/';
 			#end
-			#if SHOW_TEST
-			NativeAPI.showMessageBox("loadGame14", "test");
-			#end
 			Paths.assetsTree.__defaultLibraries.push(ModsFolder.loadLibraryFromFolder('assets', './${pathBack}assets/', true));
-			#if SHOW_TEST
-			NativeAPI.showMessageBox("loadGame15", "test");
-			#end
 		#elseif USE_ADAPTED_ASSETS
-			#if SHOW_TEST
-			NativeAPI.showMessageBox("loadGame16", "test");
-			#end
 			Paths.assetsTree.__defaultLibraries.push(ModsFolder.loadLibraryFromFolder('assets', #if mobile MobileUtil.getAssetDirectory() + #end "assets/", true));
-			#if SHOW_TEST
-			NativeAPI.showMessageBox("loadGame17", "test");
-			#end
 		#end
 
 
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame18", "test");
-		#end
 		var lib = new AssetLibrary();
 		@:privateAccess
 		lib.__proxy = Paths.assetsTree;
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame19", "test");
-		#end
 		Assets.registerLibrary('default', lib);
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame20", "test");
-		#end
 
 		funkin.options.PlayerSettings.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame21", "test");
-		#end
 		funkin.savedata.FunkinSave.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame22", "test");
-		#end
 		Options.load();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame23", "test");
-		#end
 
 		FlxG.fixedTimestep = false;
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame24", "test");
-		#end
 
 		FlxG.scaleMode = scaleMode = new FunkinRatioScaleMode();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame25", "test");
-		#end
 
 		Conductor.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame26", "test");
-		#end
 		AudioSwitchFix.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame27", "test");
-		#end
 		EventManager.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame28", "test");
-		#end
 		FlxG.signals.focusGained.add(onFocus);
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame29", "test");
-		#end
 		FlxG.signals.preStateSwitch.add(onStateSwitch);
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame30", "test");
-		#end
 		FlxG.signals.postStateSwitch.add(onStateSwitchPost);
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame31", "test");
-		#end
 
 		FlxG.mouse.useSystemCursor = true;
 		#if DARK_MODE_WINDOW
 		if(funkin.backend.utils.NativeAPI.hasVersion("Windows 10")) funkin.backend.utils.NativeAPI.redrawWindowHeader();
 		#end
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame32", "test");
-		#end
 
 		ModsFolder.init();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame33", "test");
-		#end
 		#if MOD_SUPPORT
 		ModsFolder.switchMod(modToLoad.getDefault(Options.lastLoadedMod));
-		#end
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("loadGame34", "test");
 		#end
 
 		initTransition();

@@ -25,7 +25,7 @@ class OptionsMenu extends TreeMenu {
 			state: AppearanceOptions
 		},
 		{
-			name: 'Mobile Options',
+			name: 'Mobile Options >',
 			desc: 'Change Options related to Mobile Controls.',
 			state: MobileOptions
 		},

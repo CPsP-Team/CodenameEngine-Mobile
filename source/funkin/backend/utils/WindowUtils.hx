@@ -29,10 +29,9 @@ class WindowUtils {
 	public static inline function resetClosing() __triedClosing = false;
 
 	public static inline function init() {
-		//resetTitle();
-		//resetClosing();
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("winUtil", "test");
+		#if !ios_fix
+		resetTitle();
+		resetClosing();
 		#end
 
 		Lib.application.window.onClose.add(function () {
@@ -42,9 +41,6 @@ class WindowUtils {
 			}
 			if (onClosing != null) onClosing();
 		});
-		#if SHOW_TEST
-		NativeAPI.showMessageBox("winUtil", "test");
-		#end
 	}
 
 	public static inline function resetTitle() {
