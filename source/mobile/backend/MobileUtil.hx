@@ -191,7 +191,7 @@ class MobileUtil
 	 */
 	public static function save(fileName:String = 'Ye', fileExt:String = '.txt', fileData:String = 'Nice try, but you failed, try again!', ?alert:Bool = true):Void
 	{
-		final folder:String = #if android MobileUtil.getDirectory() + #else Sys.getCwd() + #end 'saves/';
+		final folder:String = #if mobile MobileUtil.getDirectory() + #else Sys.getCwd() + #end 'saves/';
 		try
 		{
 			if (!FileSystem.exists(folder))

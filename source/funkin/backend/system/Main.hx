@@ -87,7 +87,7 @@ class Main extends Sprite
 		NativeAPI.showMessageBox("test2", "test");
 		#end
 		//Sys.setCwd(haxe.io.Path.addTrailingSlash(MobileUtil.getDirectory()));
-		MobileUtil.copyAssets();
+		#if android MobileUtil.copyAssets(); #end
 		#if SHOW_TEST
 		NativeAPI.showMessageBox("test3", "test");
 		#end
