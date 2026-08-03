@@ -148,6 +148,9 @@ class Main extends Sprite
 	}
 
 	public static function loadGameSettings() {
+		#if SHOW_TEST
+		NativeAPI.showMessageBox("loadGame0", "test");
+		#end
 		WindowUtils.init();
 		#if SHOW_TEST
 		NativeAPI.showMessageBox("loadGame1", "test");

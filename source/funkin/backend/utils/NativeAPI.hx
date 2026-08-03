@@ -171,8 +171,10 @@ class NativeAPI {
 	public static function showMessageBox(caption:String, message:String, icon:MessageBoxIcon = MSG_WARNING) {
 		#if windows
 		Windows.showMessageBox(caption, message, icon);
-		#elseif mobile
+		#elseif ios
 		MobileUtil.save('$caption-' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', '$message');
+		#elseif android
+		trace(caption);
 		#else
 		lime.app.Application.current.window.alert(message, caption);
 		#end
