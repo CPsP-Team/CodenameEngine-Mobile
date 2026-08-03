@@ -172,7 +172,7 @@ class NativeAPI {
 		#if windows
 		Windows.showMessageBox(caption, message, icon);
 		#elseif mobile
-		MobileUtil.save('messagebox/$caption-' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', '$m\n$stackLabel');
+		MobileUtil.save('messagebox/$caption-' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', '$message');
 		#else
 		lime.app.Application.current.window.alert(message, caption);
 		#end
