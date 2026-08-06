@@ -1,0 +1,36 @@
+name: Release
+on: workflow_dispatch
+
+permissions: write-all
+
+jobs:
+  build-android:
+    uses: ./.github/workflows/android.yml
+  build-ios:
+    uses: ./.github/workflows/ios.yml
+ 
+  Releaser:
+    needs: [build-android, build-ios]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Android Build
+        uses: actions/download-artifact@main
+        with:
+          name: Codename Engine Android
+          path: ${{ github.workspace }}
+
+      - name: Download iOS Build
+        uses: actions/download-artifact@main
+        with:
+          name: Codename Engine iOS
+          path: ${{ github.workspace }}
+
+      - name: Publish The Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "mobile-legacy"
+          tag_name: "mobile-legacy"
+          prerelease: false
+          files: |
+            ${{ github.workspace }}/*.apk
+            ${{ github.workspace }}/*.ipa
