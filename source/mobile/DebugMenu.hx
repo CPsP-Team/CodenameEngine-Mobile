@@ -1,5 +1,7 @@
 package mobile;
 
+import flixel.FlxG;
+import flixel.sound.FlxSound;
 import openfl.display.Sprite;
 import openfl.display.Shape;
 import openfl.text.TextField;
@@ -15,6 +17,9 @@ import haxe.Json;
 import sys.io.File;
 import sys.FileSystem;
 #end
+#if hxvlc
+import hxvlc.flixel.FlxVideoSprite;
+#end
 
 class DebugMenu extends Sprite
 {
@@ -22,6 +27,7 @@ class DebugMenu extends Sprite
 	private static var messageBuffer:Array<String> = [];
 
 	public var floatingBtn:Sprite;
+
 	private var menuPanel:Sprite;
 
 	private var bgShape:Shape;
@@ -55,6 +61,12 @@ class DebugMenu extends Sprite
 	private var swipeStartStageY:Float = 0;
 	private var swipeStartScrollV:Int = 1;
 
+	private var pausedSounds:Array<FlxSound> = [];
+
+	#if hxvlc
+	private var pausedVideos:Array<FlxVideoSprite> = [];
+	#end
+
 	public function new()
 	{
 		super();
@@ -73,6 +85,8 @@ class DebugMenu extends Sprite
 
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, onGeneralMouseMove);
 		stage.addEventListener(MouseEvent.MOUSE_UP, onGeneralMouseUp);
+
+		stage.addEventListener(Event.ACTIVATE, onWindowFocusLost);
 
 		for (htmlMsg in messageBuffer)
 		{
@@ -265,6 +279,9 @@ class DebugMenu extends Sprite
 
 	private function onIconDown(e:MouseEvent):Void
 	{
+		FlxG.mouse.enabled = false;
+		FlxG.keys.enabled = false;
+
 		var localPt = this.globalToLocal(new Point(e.stageX, e.stageY));
 		isDraggingIcon = true;
 		iconHasDragged = false;
@@ -379,12 +396,101 @@ class DebugMenu extends Sprite
 		isResizingPanel = false;
 		isSwipingText = false;
 		isDraggingScroll = false;
+
+		if (!menuPanel.visible)
+		{
+			FlxG.mouse.enabled = true;
+			FlxG.keys.enabled = true;
+		}
+	}
+
+	private function onWindowFocusLost(e:Event):Void
+	{
+		if (menuPanel.visible) {
+			#if hxvlc
+			pausedVideos = [];
+
+			var checkVideo = function(basic:flixel.FlxBasic)
+			{
+				if (basic != null && Std.isOfType(basic, FlxVideoSprite))
+				{
+					var video:FlxVideoSprite = cast basic;
+					if (video.bitmap != null)
+					{
+						video.bitmap.pause();
+						pausedVideos.push(video);
+					}
+				}
+			};
+
+			if (FlxG.state != null)
+			{
+				FlxG.state.forEachOfType(flixel.FlxBasic, checkVideo, true);
+
+				if (FlxG.state.subState != null)
+				{
+					FlxG.state.subState.forEachOfType(flixel.FlxBasic, checkVideo, true);
+				}
+			}
+			#end
+		}
 	}
 
 	private function openMenu(e:MouseEvent):Void
 	{
 		floatingBtn.visible = false;
 		menuPanel.visible = true;
+		FlxG.state.active = false;
+		FlxG.mouse.enabled = false;
+		FlxG.keys.enabled = false;
+
+		pausedSounds = [];
+
+		if (FlxG.sound.music != null && FlxG.sound.music.playing)
+		{
+			FlxG.sound.music.pause();
+			pausedSounds.push(FlxG.sound.music);
+		}
+
+		if (FlxG.sound.list != null)
+		{
+			for (sound in FlxG.sound.list.members)
+			{
+				if (sound != null && sound.playing && pausedSounds.indexOf(sound) == -1)
+				{
+					sound.pause();
+					pausedSounds.push(sound);
+				}
+			}
+		}
+
+		#if hxvlc
+		pausedVideos = [];
+
+		var checkVideo = function(basic:flixel.FlxBasic)
+		{
+			if (basic != null && Std.isOfType(basic, FlxVideoSprite))
+			{
+				var video:FlxVideoSprite = cast basic;
+				if (video.bitmap != null)
+				{
+					video.bitmap.pause();
+					pausedVideos.push(video);
+				}
+			}
+		};
+
+		if (FlxG.state != null)
+		{
+			FlxG.state.forEachOfType(flixel.FlxBasic, checkVideo, true);
+
+			if (FlxG.state.subState != null)
+			{
+				FlxG.state.subState.forEachOfType(flixel.FlxBasic, checkVideo, true);
+			}
+		}
+		#end
+
 		updateScrollbar();
 	}
 
@@ -392,6 +498,29 @@ class DebugMenu extends Sprite
 	{
 		floatingBtn.visible = true;
 		menuPanel.visible = false;
+		FlxG.state.active = true;
+		FlxG.mouse.enabled = true;
+		FlxG.keys.enabled = true;
+
+		for (sound in pausedSounds)
+		{
+			if (sound != null)
+			{
+				sound.resume();
+			}
+		}
+		pausedSounds = [];
+
+		#if hxvlc
+		for (video in pausedVideos)
+		{
+			if (video != null && video.bitmap != null)
+			{
+				video.bitmap.resume();
+			}
+		}
+		pausedVideos = [];
+		#end
 	}
 
 	private function getSavePath():String
@@ -399,7 +528,7 @@ class DebugMenu extends Sprite
 		#if android
 		return AndroidContext.getExternalFilesDir() + "/debugMenuPrefs.json";
 		#else
-		return "debugMenuPrefs.json"; // Fallback for Windows/Mac/iOS
+		return "debugMenuPrefs.json";
 		#end
 	}
 
@@ -421,7 +550,6 @@ class DebugMenu extends Sprite
 		}
 		catch (e:Dynamic)
 		{
-			trace("Failed to save DebugMenu layout: " + e);
 		}
 		#end
 	}
@@ -454,7 +582,6 @@ class DebugMenu extends Sprite
 		}
 		catch (e:Dynamic)
 		{
-			trace("Failed to load DebugMenu layout: " + e);
 		}
 		#end
 	}
@@ -466,14 +593,12 @@ class DebugMenu extends Sprite
 		updateScrollbar();
 	}
 
-	/** Keep for backwards compatibility if you just want to throw raw text in */
 	public static function addTextToDebug(text:String, color:Int = 0xFFFFFF):Void
 	{
 		var colorHex:String = StringTools.hex(color, 6);
 		addHTMLLineToDebug("<font color='#" + colorHex + "'>" + StringTools.htmlEscape(text) + "</font>");
 	}
 
-	/** NEW: Takes a pre-formatted HTML string and adds it as ONE line */
 	public static function addHTMLLineToDebug(htmlString:String):Void
 	{
 		if (instance != null && instance.logText != null)

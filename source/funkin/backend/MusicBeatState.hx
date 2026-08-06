@@ -85,6 +85,9 @@ class MusicBeatState extends FlxState implements IBeatReceiver
 	/* DPad */
 	public function addDPad(DPad:String) {
 		mobileManager.addDPad(DPad);
+		for (dpad in mobileManager.dpads) {
+			dpad.alpha = Options.controlsAlpha;
+		}
 	}
 	public function removeDPad() {
 		mobileManager.removeDPad();
@@ -96,6 +99,9 @@ class MusicBeatState extends FlxState implements IBeatReceiver
 	/* Button */
 	public function addButton(Action:String) {
 		mobileManager.addButton(Action);
+		for (button in mobileManager.buttons) {
+			button.alpha = Options.controlsAlpha;
+		}
 	}
 	public function removeButton() {
 		mobileManager.removeButton();
@@ -107,6 +113,9 @@ class MusicBeatState extends FlxState implements IBeatReceiver
 	/* Hitbox */
 	public function addHitbox(?mode:String = "Normal"):Void {
 		mobileManager.addHitbox(mode);
+		for (hitbox in mobileManager.hitboxes) {
+			hitbox.alpha = Options.controlsAlpha;
+		}
 	}
 	public function removeHitbox() {
 		mobileManager.removeHitbox();
@@ -118,6 +127,9 @@ class MusicBeatState extends FlxState implements IBeatReceiver
 	/* JoyStick */
 	public function addJoyStick(joy:String) {
 		mobileManager.addJoyStick(joy);
+		for (joystick in mobileManager.joysticks) {
+			joystick.alpha = Options.controlsAlpha;
+		}
 	}
 	public function removeJoyStick() {
 		mobileManager.removeJoyStick();
