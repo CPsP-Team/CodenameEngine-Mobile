@@ -153,6 +153,7 @@ class OptionsMenu extends TreeMenu {
 	override function exit() {
 		Options.save();
 		Options.applySettings();
+		FlxG.save.flush();
 		super.exit();
 	}
 
