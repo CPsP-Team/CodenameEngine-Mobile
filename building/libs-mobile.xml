@@ -4,7 +4,7 @@
 		<print pretty="true">Preparing installation...</print>
 
 		<!-- Mobile Controls Library -->
-		<git name="mobile-controls" url="https://github.com/ArkoseLabsOfficial/mobile-controls-dev" />
+		<git name="mobile-controls" url="https://github.com/ArkoseLabsOfficial/mobile-controls" />
 
 		<!-- Hxcpp & OpenFL & Lime (Required for Flixel) -->
 		<git name="hxcpp" url="https://github.com/CodenameCrew/cne-hxcpp"/>
