@@ -72,8 +72,12 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 		framesOffset = (selected ? 18 : (hovered ? 9 : 0));
 		@:privateAccess {
 			if (selected) {
-				FlxG.stage.window.textInputEnabled = true;
-				__wasFocused = true;
+
+				if (!__wasFocused) {
+					FlxG.stage.window.textInputEnabled = true;
+					__wasFocused = true;
+				}
+
 				caretSpr.alpha = (FlxG.game.ticks % 666) >= 333 ? 1 : 0;
 
 				var curPos = switch (position) {
@@ -92,6 +96,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 				curPos.put();
 			} else {
 				if (__wasFocused) {
+					FlxG.stage.window.textInputEnabled = false;
 					__wasFocused = false;
 					if (onChange != null)
 						onChange(label.text);
@@ -202,32 +207,41 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 			case END:
 				position = label.text.length;
 			case V:
-				UIState.playEditorSound(Flags.DEFAULT_EDITOR_PASTE_SOUND);
 				// Hey lj here, fixed copying because before we checked if the modifier was left or right ctrl
 				// but somehow it gave a int outside of the KeyModifier's range :sob:
 				// apparently there is a boolean that just checks for you. yw :D
 
 				// if we are not holding ctrl, ignore
-				if (!modifier.ctrlKey)
+				if (!modifier.ctrlKey) {
+				    UIState.playEditorSound(Flags.DEFAULT_EDITOR_TEXTTYPE_SOUND);
 					return;
+				}
+
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_PASTE_SOUND);
+				
 				// we pasting
 				var data:String = Clipboard.generalClipboard.getData(TEXT_FORMAT);
 				if (data != null)
 					onTextInput(data);
 			case C:
-				UIState.playEditorSound(Flags.DEFAULT_EDITOR_COPY_SOUND);
 				// if we are not holding ctrl, ignore
-				if (!modifier.ctrlKey)
+				if (!modifier.ctrlKey) {
+				    UIState.playEditorSound(Flags.DEFAULT_EDITOR_TEXTTYPE_SOUND);
 					return;
+				}
+
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_COPY_SOUND);
 
 				// copying
 				Clipboard.generalClipboard.setData(TEXT_FORMAT, label.text);
 			case X:
-				UIState.playEditorSound(Flags.DEFAULT_EDITOR_CUT_SOUND);
-
 				// if we are not holding ctrl, ignore
-				if (!modifier.ctrlKey)
+				if (!modifier.ctrlKey) {
+				    UIState.playEditorSound(Flags.DEFAULT_EDITOR_TEXTTYPE_SOUND);
 					return;
+				}
+
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_CUT_SOUND);
 
 				// cutting
 				Clipboard.generalClipboard.setData(TEXT_FORMAT, label.text);

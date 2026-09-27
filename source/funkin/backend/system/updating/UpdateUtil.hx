@@ -42,6 +42,19 @@ class UpdateUtil {
 		#end
 	}
 
+	public static function getNameOfExecutable():String
+	{
+		return #if windows "CodenameEngine.exe" #else "CodenameEngine" #end;
+	}
+
+	public static function getNameOfUpdateExecutable():String
+	{
+		var target:String = #if windows "windows.exe" #end
+							#if mac "mac" #end
+							#if linux "linux" #end;
+		return 'update-${target}';
+	}
+
 	public static function waitForUpdates(force = false, callback:UpdateCheckCallback->Void, lazy = false) {
 		#if (target.threaded)
 		if (__mutex.tryAcquire()) {
@@ -111,11 +124,12 @@ class UpdateUtil {
 
 	static function __doReleaseFiltering(releases:Array<GitHubRelease>, currentVersionTag:String) {
 		releases = releases.filterReleases(Options.betaUpdates, false);
+
 		if (releases.length <= 0)
 			return releases;
 
 		var newArray:Array<GitHubRelease> = [], __curVersionPos = -2;
-
+		var thisVersionExists:Bool = false;
 		var skipNextBinaryChecks:Bool = false;
 		for(index in 0...releases.length) {
 			var i = index;
@@ -132,11 +146,15 @@ class UpdateUtil {
 			}
 			if (containsBinary) {
 				skipNextBinaryChecks = true; // no need to check for older versions
-				if (release.tag_name == currentVersionTag) __curVersionPos = -1;
+				if (release.tag_name == currentVersionTag) {
+					__curVersionPos = -1;
+					thisVersionExists = true;
+				}
 				newArray.insert(0, release);
 				if (__curVersionPos > -2) __curVersionPos++;
 			}
 		}
+		if (!thisVersionExists) return [];
 		if (__curVersionPos < -1)
 			__curVersionPos = -1;
 

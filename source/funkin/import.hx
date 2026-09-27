@@ -38,4 +38,8 @@ import mobile.backend.MobileUtil;
 
 using StringTools;
 using funkin.backend.utils.CoolUtil;
+
+#if IMGUI_ENABLED
+import lime.tools.imgui.*;
+#end
 #end

@@ -3,6 +3,9 @@ package funkin.editors;
 import haxe.io.Path;
 import haxe.io.Bytes;
 import lime.ui.FileDialog;
+#if lime_funkin
+import lime.ui.FileDialogFilter;
+#end
 
 class SaveSubstate extends MusicBeatSubstate {
 	public var saveOptions:Map<String, Bool>;
@@ -39,6 +42,13 @@ class SaveSubstate extends MusicBeatSubstate {
         var fileBytes = Bytes.ofString(data);
         fileDialog.save(fileBytes, options.saveExt.getDefault(Path.extension(options.defaultSaveFile)), options.defaultSaveFile);
         #else
+		#if lime_funkin
+		FileDialog.saveFile(FlxG.stage.window, "Save File", (fileName:String, activeFilter:FileDialogFilter) -> {
+			CoolUtil.safeSaveFile(fileName, data);
+			close();
+		}, [new FileDialogFilter("Specified File Extension", options.saveExt.getDefault(Path.extension(options.defaultSaveFile)))],
+			options.defaultSaveFile);
+		#else
 		var fileDialog = new FileDialog();
 		fileDialog.onCancel.add(function() close());
 		fileDialog.onSelect.add(function(str) {
@@ -46,6 +56,7 @@ class SaveSubstate extends MusicBeatSubstate {
 			close();
 		});
 		fileDialog.browse(SAVE, options.saveExt.getDefault(Path.extension(options.defaultSaveFile)), options.defaultSaveFile);
+		#end
 		#end
 	}
 

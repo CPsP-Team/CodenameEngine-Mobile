@@ -59,7 +59,7 @@ class ZipFolderLibrary extends AssetLibrary implements IModsAssetLibrary {
 	}
 
 	public function precacheVideos() {
-		_videoExtensions = [Flags.VIDEO_EXT];
+		_videoExtensions = Flags.VIDEO_EXTS;
 		
 		videoCacheRemap = [];
 		for (entry in zip.entries) {
@@ -74,7 +74,7 @@ class ZipFolderLibrary extends AssetLibrary implements IModsAssetLibrary {
 	}
 
 	// Now we have supports for videos in ZIP!!
-	public var _videoExtensions:Array<String> = [Flags.VIDEO_EXT];
+	public var _videoExtensions:Array<String> = Flags.VIDEO_EXTS;
 	public var videoCacheRemap:Map<String, String> = [];
 	public function getVideoRemap(originalPath:String):String {
 		if (!_videoExtensions.contains(Path.extension(_parsedAsset))) return originalPath;

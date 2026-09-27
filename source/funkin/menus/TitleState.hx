@@ -100,8 +100,6 @@ class TitleState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.F)  FlxG.fullscreen = !FlxG.fullscreen;
-
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
 
 		#if mobile
@@ -314,7 +312,7 @@ class IntroText {
 		for(e in lines) {
 			if (e is String) {
 				var text = cast(e, String);
-				for(k=>e in state.curWacky) text = text.replace('{introText${k+1}}', e);
+				for(k=>e in state.curWacky) text = text.replace('{introText${k+1}}', e.trim());
 				state.addMoreText(text);
 			} else if (e is Dynamic) {
 				var image:TitleStateImage = e;

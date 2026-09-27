@@ -69,7 +69,9 @@ class GlobalScript {
 			call("preStateCreate", [state]);
 		});
 		FlxG.signals.preStateSwitch.add(function() {
-			call("preStateSwitch", []);
+			call("preStateSwitch");
+
+			if (Flags.PATHS_CACHE_RESET_ON_SWITCH_STATE) Paths.assetsTree.resetAssetPathCache();
 
 			var stateName = Type.getClassName(Type.getClass(@:privateAccess FlxG.game._requestedState));
 			stateName = stateName.substring(stateName.lastIndexOf(".") + 1);

@@ -2,6 +2,8 @@ package funkin.backend.assets;
 
 import flixel.util.FlxSignal.FlxTypedSignal;
 import funkin.backend.system.MainState;
+import funkin.backend.utils.CoolUtil;
+import haxe.ds.StringMap;
 import haxe.io.Path;
 import lime.text.Font;
 import openfl.text.Font as OpenFLFont;
@@ -46,6 +48,8 @@ class ModsFolder {
 	 * Whenever its the first time mods has been reloaded.
 	 */
 	private static var __firstTime:Bool = true;
+	
+	@:dox(hide) public static var modsListSortCache:StringMap<Array<String>> = new StringMap();
 
 	/**
 	 * Initializes `mods` folder.
@@ -101,7 +105,30 @@ class ModsFolder {
 		#end
 	}
 
-	public static function getModsList():Array<String> {
+	public static function getModConfig(mod:String):Map<String, Map<String, String>> {
+		for (ext in Flags.ALLOWED_ZIP_EXTENSIONS) {
+			var path = modsPath + mod + "." + ext;
+			if (!FileSystem.exists(path))
+				continue;
+
+			var zip = new SysZip(path);
+			for (entry in zip.entries) {
+				if (entry.fileName.toLowerCase() == "data/config/modpack.ini") {
+					var bytes = zip.unzipEntry(entry);
+					return IniUtil.parseString(bytes.getString(0, bytes.length));
+				}
+			}
+			break; // theoretically once it finds a zip mod, it'll stop even if there's no config
+		}
+
+		var filePath = modsPath + mod + "/data/config/modpack.ini";
+		if (FileSystem.exists(filePath))
+			return IniUtil.parseString(sys.io.File.getContent(filePath));
+
+		return [];
+	}
+
+	public static function getModsList(?sortingOptions:ModSortingOptions):Array<String> {
 		var mods:Array<String> = [];
 		#if MOD_SUPPORT
 		final modsList:Array<String> = FileSystem.readDirectory(modsPath);
@@ -111,6 +138,28 @@ class ModsFolder {
 		for (modFolder in modsList) {
 			if (FileSystem.isDirectory(modsPath + modFolder)) mods.push(modFolder);
 			else if (Flags.ALLOWED_ZIP_EXTENSIONS.contains(Path.extension(modFolder))) mods.push(Path.withoutExtension(modFolder));
+		}
+		
+		if (sortingOptions != null) {
+		    var sortForge:StringBuf = new StringBuf();
+			for (i in mods) {
+			    sortForge.add(i);
+				sortForge.add("::");
+			}
+
+			sortForge.add(Std.string(sortingOptions.descending ? 1 : 0));
+
+			sortForge.add(sortingOptions.mode);
+			
+			final sortForgePure:String = sortForge.toString();
+
+			if (modsListSortCache.exists(sortForgePure))
+			    mods = modsListSortCache.get(sortForgePure);
+				if (mods.length > 0 && mods[mods.length - 1] == null) mods.pop();
+			else {
+			    ModSortingController.sort(sortingOptions, mods);
+				modsListSortCache.set(sortForgePure, mods);
+			}
 		}
 		#end
 		return mods;
@@ -170,4 +219,49 @@ class ModsFolder {
 		return prepareModLibrary(libName, new ZipFolderLibrary(zipPath, libName, modName), force, tag);
 	}
 	#end
+}
+
+/**
+ * Describes how mods should be sorted when getting the mods list.
+ */
+typedef ModSortingOptions = {
+    /**
+     * Whether or not the list should go in descending order (e.g. `[2, 1, 0]`).
+     */
+    var descending:Bool;
+    /**
+     * The sorting mode to use.
+     */
+    var mode:ModSortingMode;
+}
+
+/**
+ * This class performs the actual sorting for the mods list.
+ */
+class ModSortingController {
+    /**
+     * Sort the mods list, according to the provided sorting options.
+     */
+    public static function sort(sortingOptions:ModSortingOptions, list:Array<String>):Void {
+        switch (sortingOptions.mode) {
+            case ModSortingMode.CLEAN: {}
+            case ModSortingMode.ALPHABETICAL: CoolUtil.sortAlphabetically(list);
+        }
+        if (sortingOptions.descending) list.reverse();
+    }
+}
+
+/**
+ * The mods list can be sorted in all of the ways provided by this enum.
+ */
+enum abstract ModSortingMode(String) {
+    /**
+     * Use the original list received from reading the directory. This may depend
+     * on the current platform, but remains for legacy purposes.
+     */
+    var CLEAN;
+    /**
+     * The list should be in alphabetical order.
+     */
+    var ALPHABETICAL;
 }

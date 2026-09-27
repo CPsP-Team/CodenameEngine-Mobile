@@ -188,10 +188,16 @@
 		*/
 		public var ratingNum:Int = 0;
 
-		/**
-		* Object defining the camera follow target.
-		*/
-		public var camFollow:FlxObject;
+	/**
+	 * Object defining the camera follow target.
+	 */
+	public var camFollow:FlxObject;
+
+	/**
+	 * Point defining the camera follow offset.
+	 * Used for the "Camera Movement" event.
+	 */
+	public var cameraFocusOffset:FlxPoint;
 
 		/**
 		* Previous cam follow.
@@ -572,8 +578,10 @@
 		public var hitWindow:Float = Options.hitWindow;
 		@:noCompletion @:dox(hide) private var _legacyRating:Rating = {name: "", window: 0, accuracy: 0, score: 0};
 
-		@:noCompletion @:dox(hide) private var _startCountdownCalled:Bool = false;
-		@:noCompletion @:dox(hide) private var _endSongCalled:Bool = false;
+	@:noCompletion @:dox(hide) private var _startCountdownCalled:Bool = false;
+	@:noCompletion @:dox(hide) private var _endSongCalled:Bool = false;
+
+	@:noCompletion @:dox(hide) private static var _ONE_ARG:Array<Dynamic> = [null];
 
 		@:dox(hide)
 		var __vocalSyncTimer:Float = 1;
@@ -727,10 +735,12 @@
 			comboGroup.maxSize = Flags.DEFAULT_COMBO_GROUP_MAX_SIZE;
 			#end
 
-			// CAMERA FOLLOW, SCRIPTS & STAGE INITIALIZATION
-			#if REGION
-			camFollow = new FlxObject(0, 0, 2, 2);
-			add(camFollow);
+		// CAMERA FOLLOW, SCRIPTS & STAGE INITIALIZATION
+		#if REGION
+		camFollow = new FlxObject(0, 0, 2, 2);
+		add(camFollow);
+
+		cameraFocusOffset = FlxPoint.get();
 
 			if (SONG.stage == null || SONG.stage.trim() == "") SONG.stage = Flags.DEFAULT_STAGE;
 			add(stage = new Stage(SONG.stage));
@@ -927,9 +937,11 @@
 				if (s != null)
 					FlxG.sound.load(Paths.sound(s));
 
-			if (chartingMode) {
+		if (chartingMode) {
+			if (Flags.CHANGE_WINDOW_TITLE_PLAYSTATE) {
 				WindowUtils.prefix = Charter.undos.unsaved ? Flags.UNDO_PREFIX : "";
 				WindowUtils.suffix = TU.translate("playtesting.chartPlaytesting");
+			}
 
 				SaveWarning.showWarning = Charter.undos.unsaved;
 				SaveWarning.selectionClass = CharterSelection;
@@ -1125,24 +1137,26 @@
 			if (notNull) PlayState.instance.gameAndCharsCall("onStageDestroy", [stage]);
 			scripts.call("destroy");
 
-			for (g in __cachedGraphics) g.useCount--;
-			@:privateAccess {
-				for (strumLine in strumLines.members) FlxG.sound.destroySound(strumLine.vocals);
-				if (FlxG.sound.music != inst) FlxG.sound.destroySound(inst);
-				FlxG.sound.destroySound(vocals);
-			}
+		for (g in __cachedGraphics) g.decrementUseCount();
+		@:privateAccess {
+			for (strumLine in strumLines.members) FlxG.sound.destroySound(strumLine.vocals);
+			if (FlxG.sound.music != inst) FlxG.sound.destroySound(inst);
+			FlxG.sound.destroySound(vocals);
+		}
 
-			if (notNull) {
-				stage.destroySilently();
-				remove(stage, true);
-			}
+		if (notNull) {
+			stage.destroySilently();
+			remove(stage, true);
+		}
+
+		cameraFocusOffset.put();
 
 			scripts = FlxDestroyUtil.destroy(scripts);
 
 			super.destroy();
 
-			WindowUtils.resetAffixes();
-			SaveWarning.reset();
+		if (Flags.CHANGE_WINDOW_TITLE_PLAYSTATE) WindowUtils.resetAffixes();
+		SaveWarning.reset();
 
 			instance = null;
 
@@ -1190,7 +1204,7 @@
 			curSong = songData.meta.name.toLowerCase();
 			curSongID = curSong.replace(" ", "-");
 
-			FlxG.sound.setMusic(inst = FlxG.sound.load(Assets.getMusic(Paths.inst(SONG.meta.name, difficulty, SONG.meta.instSuffix))));
+		FlxG.sound.setMusic(inst = FlxG.sound.load(Paths.inst(SONG.meta.name, difficulty, SONG.meta.instSuffix)));
 
 			var vocalsPath = Paths.voices(SONG.meta.name, difficulty, SONG.meta.vocalsSuffix);
 			if (SONG.meta.needsVoices && Assets.exists(vocalsPath))
@@ -1271,31 +1285,21 @@
 		public inline function getIconRPC():String
 			return SONG.meta.icon;
 
-		@:dox(hide)
-		override public function onFocus():Void
-		{
-			if (!paused && FlxG.autoPause) {
-				for (strumLine in strumLines.members) strumLine.vocals.resume();
-				inst.resume();
-				vocals.resume();
-			}
-			gameAndCharsCall("onFocus");
-			updateDiscordPresence();
-			super.onFocus();
-		}
+	@:dox(hide)
+	override public function onFocus():Void
+	{
+		gameAndCharsCall("onFocus");
+		updateDiscordPresence();
+		super.onFocus();
+	}
 
-		@:dox(hide)
-		override public function onFocusLost():Void
-		{
-			if (!paused && FlxG.autoPause) {
-				for (strumLine in strumLines.members) strumLine.vocals.pause();
-				inst.pause();
-				vocals.pause();
-			}
-			gameAndCharsCall("onFocusLost");
-			updateDiscordPresence();
-			super.onFocusLost();
-		}
+	@:dox(hide)
+	override public function onFocusLost():Void
+	{
+		gameAndCharsCall("onFocusLost");
+		updateDiscordPresence();
+		super.onFocusLost();
+	}
 
 		@:dox(hide)
 		inline function resyncVocals():Void
@@ -1309,26 +1313,26 @@
 			gameAndCharsCall("onVocalsResync");
 		}
 
-		/**
-		* Pauses the game.
-		*/
-		public function pauseGame() {
-			var e = gameAndCharsEvent("onGamePause", new CancellableEvent());
-			if (e.cancelled) return;
+	/**
+	 * Pauses the game.
+	 */
+	public function pauseGame() {
+		var e = gameAndCharsEvent("onGamePause", EventManager.get(PauseGameEvent).recycle([], allowGitaroo));
+		if (e.cancelled) return;
 
 			persistentUpdate = false;
 			persistentDraw = true;
 			paused = true;
 
-			// 1 / 1000 chance for Gitaroo Man easter egg
-			if (allowGitaroo && FlxG.random.bool(Flags.GITAROO_CHANCE))
-			{
-				// gitaroo man easter egg
-				FlxG.switchState(new GitarooPause());
-			}
-			else {
-				openSubState(new PauseSubState());
-			}
+		// 1 / 1000 chance for Gitaroo Man easter egg
+		if (!chartingMode && e.allowGitaroo && FlxG.random.bool(Flags.GITAROO_CHANCE))
+		{
+			// gitaroo man easter egg
+			FlxG.switchState(new GitarooPause());
+		}
+		else {
+			openSubState(new PauseSubState(null, null, e.excludeList));
+		}
 
 			updateDiscordPresence();
 		}
@@ -1415,16 +1419,17 @@
 			}
 		}
 
-		@:dox(hide)
-		override public function update(elapsed:Float)
-		{
-			scripts.call("update", [elapsed]);
+	@:dox(hide)
+	override public function update(elapsed:Float)
+	{
+		_ONE_ARG[0] = elapsed;
+		scripts.call("update", _ONE_ARG);
 
-			if (inCutscene) {
-				super.update(elapsed);
-				scripts.call("postUpdate", [elapsed]);
-				return;
-			}
+		if (inCutscene) {
+			super.update(elapsed);
+			scripts.call("postUpdate", _ONE_ARG);
+			return;
+		}
 
 			if (updateRatingStuff != null)
 				updateRatingStuff();
@@ -1432,19 +1437,14 @@
 			if (canAccessDebugMenus && chartingMode && controls.DEV_ACCESS)
 				FlxG.switchState(new funkin.editors.charter.Charter(SONG.meta.name, difficulty, variation, false));
 
-			if (Options.camZoomOnBeat && camZooming) {
-				var beat = Conductor.getBeats(camZoomingEvery, camZoomingInterval, camZoomingOffset);
-				if (camZoomingLastBeat != beat) {
-					camZoomingLastBeat = beat;
-					if (useCamZoomMult) {
-						if (camZoomingMult < maxCamZoomMult) camZoomingMult += camZoomingStrength;
-					}
-					else if (FlxG.camera.zoom < maxCamZoom) {
-						FlxG.camera.zoom += camGameZoomMult * camZoomingStrength;
-						camHUD.zoom += camHUDZoomMult * camZoomingStrength;
-					}
-				}
+		if (Options.camZoomOnBeat && camZooming) {
+			var beat = Conductor.getBeats(camZoomingEvery, camZoomingInterval, camZoomingOffset);
+			if (camZoomingLastBeat != beat) {
+				camZoomingLastBeat = beat;
+				
+				doBopZoom();
 			}
+		}
 
 			if (doIconBop)
 				for (icon in iconArray)
@@ -1512,25 +1512,50 @@
 
 			super.update(elapsed);
 
-			scripts.call("postUpdate", [elapsed]);
+		scripts.call("postUpdate", _ONE_ARG);
+	}
+
+	override function draw() {
+		var e = scripts.event("draw", EventManager.get(DrawEvent).recycle());
+		if (!e.cancelled)
+			super.draw();
+		scripts.event("postDraw", e);
+	}
+
+	public function doBopZoom()
+	{
+		var event:BopZoomEvent = EventManager.get(BopZoomEvent).recycle(useCamZoomMult, maxCamZoomMult, camZoomingStrength);
+		gameAndCharsEvent("onBopZoom", event);
+
+		if (event.cancelled)
+		{
+			gameAndCharsEvent("onPostBopZoom", event);
+			return;
 		}
 
-		override function draw() {
-			var e = scripts.event("draw", EventManager.get(DrawEvent).recycle());
-			if (!e.cancelled)
-				super.draw();
-			scripts.event("postDraw", e);
+		if (event.useZoomMultiplier) {
+			if (camZoomingMult < event.maxZoomMultiplier)
+				camZoomingMult += event.zoomStrength;
+		}
+		else if (FlxG.camera.zoom < maxCamZoom) {
+			FlxG.camera.zoom += camGameZoomMult * event.zoomStrength;
+			camHUD.zoom += camHUDZoomMult * event.zoomStrength;
 		}
 
-		public function moveCamera() if (strumLines.members[curCameraTarget] != null) {
-			var data:CamPosData = getStrumlineCamPos(curCameraTarget);
-			if (data.amount > 0) {
-				var event = gameAndCharsEvent("onCameraMove", EventManager.get(CamMoveEvent).recycle(data.pos, strumLines.members[curCameraTarget], data.amount));
-				if (!event.cancelled)
-					camFollow.setPosition(event.position.x, event.position.y);
-			}
-			data.put();
+		gameAndCharsEvent("onPostBopZoom", event);
+	}
+
+	public function moveCamera() if (strumLines.members[curCameraTarget] != null) {
+		var data:CamPosData = getStrumlineCamPos(curCameraTarget);
+		data.pos.add(cameraFocusOffset.x, cameraFocusOffset.y);
+
+		if (data.amount > 0) {
+			var event = gameAndCharsEvent("onCameraMove", EventManager.get(CamMoveEvent).recycle(data.pos, strumLines.members[curCameraTarget], data.amount));
+			if (!event.cancelled)
+				camFollow.setPosition(event.position.x, event.position.y);
 		}
+		data.put();
+	}
 
 		/**
 		* Returns the camera position of the specified strumline.
@@ -1606,8 +1631,11 @@
 						tween.cancel();
 					}
 
-					curCameraTarget = event.params[0];
-					moveCamera();
+				curCameraTarget = event.params[0];
+
+				cameraFocusOffset.set(event.params[5], event.params[6]);
+
+				moveCamera();
 
 					if (strumLines.members[curCameraTarget] != null) {
 						if (event.params[1] == false) FlxG.camera.snapToTarget();
@@ -1665,26 +1693,32 @@
 					var finalZoom:Float = event.params[1] * (event.params[6] == 'direct' ? FlxCamera.defaultZoom : stage.defaultZoom);
 					if (event.params[7] == true) finalZoom *= cam.zoom;
 
-					if (event.params[0] == false) {
-						cam.zoom = finalZoom;
+				if (event.params[0] == false) {
+					cam.zoom = finalZoom;
+					if (cam == camHUD) defaultHudZoom = finalZoom;
+					else defaultCamZoom = finalZoom;
+				} else if (event.params[4] == "CLASSIC") {
+					if (cam == camHUD) defaultHudZoom = finalZoom;
+					else defaultCamZoom = finalZoom;
+				} else
+					eventsTween.set(name, FlxTween.tween(cam, {zoom: finalZoom}, (Conductor.stepCrochet / 1000) * event.params[3], {ease: CoolUtil.flxeaseFromString(event.params[4], event.params[5]), onUpdate: function(_) {
+						if (cam == camHUD) defaultHudZoom = cam.zoom;
+						else defaultCamZoom = cam.zoom;
+					}, onComplete: _ -> {
 						if (cam == camHUD) defaultHudZoom = finalZoom;
 						else defaultCamZoom = finalZoom;
-					} else
-						eventsTween.set(name, FlxTween.tween(cam, {zoom: finalZoom}, (Conductor.stepCrochet / 1000) * event.params[3], {ease: CoolUtil.flxeaseFromString(event.params[4], event.params[5]), onUpdate: function(_) {
-							if (cam == camHUD) defaultHudZoom = cam.zoom;
-							else defaultCamZoom = cam.zoom;
-						}}));
-				case "Camera Modulo Change":
-					camZoomingInterval = event.params[0];
-					camZoomingStrength = event.params[1];
-					if (event.params[2] != null) camZoomingEvery = switch (event.params[2].toUpperCase()) {
-						case "STEP": STEP;
-						case "MEASURE": MEASURE;
-						default: BEAT;
-					}
-					if (event.params[3] != null) camZoomingOffset = event.params[3];
-				case "Camera Flash":
-					var camera:FlxCamera = event.params[3] == "camHUD" ? camHUD : camGame;
+					}}));
+			case "Camera Modulo Change":
+				camZoomingInterval = event.params[0];
+				camZoomingStrength = event.params[1];
+				if (event.params[2] != null) camZoomingEvery = switch (event.params[2].toUpperCase()) {
+					case "STEP": STEP;
+					case "MEASURE": MEASURE;
+					default: BEAT;
+				}
+				if (event.params[3] != null) camZoomingOffset = event.params[3];
+			case "Camera Flash":
+				var camera:FlxCamera = event.params[3] == "camHUD" ? camHUD : camGame;
 
 					if (event.params[0]) // reversed
 						camera.fade(event.params[1], (Conductor.stepCrochet / 1000) * event.params[2], false, () -> {camera._fxFadeAlpha = 0;}, true);
@@ -1707,21 +1741,21 @@
 					if (strLine != null) {
 						strLine.altAnim = cast event.params[0];
 
-						if (strLine.characters != null) // Alt anim Idle
-							for (character in strLine.characters) {
-								if (character == null) continue;
-								character.idleSuffix = event.params[1] ? strLine.defaultAnimSuffix : "";
-							}
-					}
-				case "Play Animation":
-					if (strumLines.members[event.params[0]] != null && strumLines.members[event.params[0]].characters != null)
-						for (char in strumLines.members[event.params[0]].characters)
-							if (char != null && char.hasAnim(event.params[1])) char.playAnim(event.params[1], event.params[2], event.params[3] == "NONE" ? null : event.params[3]);
-				case "Unknown": // nothing
-			}
-			
-			gameAndCharsEvent("onPostEvent", e);
+					if (strLine.characters != null) // Alt anim Idle
+						for (character in strLine.characters) {
+							if (character == null) continue;
+							character.idleSuffix = event.params[1] ? strLine.defaultAnimSuffix : "";
+						}
+				}
+			case "Play Animation":
+				if (strumLines.members[event.params[0]] != null && strumLines.members[event.params[0]].characters != null)
+					for (char in strumLines.members[event.params[0]].characters)
+						if (char != null && char.hasAnim(event.params[1])) char.playAnim(event.params[1], event.params[2], event.params[3] == "NONE" ? null : event.params[3]);
+			case "Unknown": // nothing
 		}
+
+		gameAndCharsEvent("onPostEvent", e);
+	}
 
 		@:dox(hide)
 		public var __updateNote_event:NoteUpdateEvent = null;
@@ -1995,16 +2029,16 @@
 
 		var event:NoteHitEvent;
 		if (strumLine != null && !strumLine.cpu)
-			event = EventManager.get(NoteHitEvent).recycle(rating.breaksCombo, !note.isSustainNote, !note.isSustainNote, null, null, null, note, strumLine.characters, true, note.noteType, note.animSuffix.getDefault(note.strumID < strumLine.members.length ? strumLine.members[note.strumID].animSuffix : strumLine.animSuffix), null, null, note.strumID, rating.score, note.isSustainNote ? null : rating.accuracy, rating.health, rating.name, Options.splashesEnabled && !note.isSustainNote && rating.splash, null, null, null, null, null, iconP1);
+			event = EventManager.get(NoteHitEvent).recycle(rating.breaksCombo, !note.isSustainNote, !note.isSustainNote, null, null, null, note, strumLine.characters, true, note.noteType, note.animSuffix.getDefault(note.strumID < strumLine.members.length ? strumLine.members[note.strumID].animSuffix : strumLine.animSuffix), null, null, note.strumID, rating.score, note.isSustainNote ? null : rating.accuracy, rating.health, rating.name, Options.splashesEnabled && !note.isSustainNote && rating.splash, null, null, null, null, null, iconP1, true);
 		else
-			event = EventManager.get(NoteHitEvent).recycle(rating.breaksCombo, false, false, null, null, null, note, strumLine.characters, false, note.noteType, note.animSuffix.getDefault(note.strumID < strumLine.members.length ? strumLine.members[note.strumID].animSuffix : strumLine.animSuffix), null, null, note.strumID, 0, null, 0, rating.name, false, null, null, null, null, true, iconP2);
+			event = EventManager.get(NoteHitEvent).recycle(rating.breaksCombo, false, false, null, null, null, note, strumLine.characters, false, note.noteType, note.animSuffix.getDefault(note.strumID < strumLine.members.length ? strumLine.members[note.strumID].animSuffix : strumLine.animSuffix), null, null, note.strumID, 0, null, 0, rating.name, false, null, null, null, null, true, iconP2, false);
 		event.deleteNote = !note.isSustainNote; // work around, to allow sustain notes to be deleted
 		event = scripts.event(strumLine != null && !strumLine.cpu ? "onPlayerHit" : "onDadHit", event);
 		strumLine.onHit.dispatch(event);
 		gameAndCharsEvent("onNoteHit", event);
 
 		note.noSustainClip = !event.clipSustain;
-		
+
 		if (!event.cancelled) {
 			if (!note.isSustainNote) {
 				if (event.countScore) songScore += event.score;
@@ -2018,6 +2052,14 @@
 					misses++;
 				} else if (event.countAsCombo)
 					combo++;
+
+				if (event.charsComboAnim && event.player && combo > 0) {
+					var comboAnim:String = 'combo$combo';
+					
+					for (sl in strumLines.members) for (c in sl.characters) {
+						if (c.hasAnim(comboAnim)) c.playAnim(comboAnim, true);
+					}
+				}
 
 				if (event.showRating || (event.showRating == null && event.player))
 				{

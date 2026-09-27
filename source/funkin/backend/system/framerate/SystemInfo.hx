@@ -13,6 +13,7 @@ import android.os.Build.VERSION;
 #end
 
 using StringTools;
+import funkin.backend.system.macros.StringMacro;
 
 #if cpp
 #if windows
@@ -152,21 +153,38 @@ class SystemInfo extends FramerateCategory {
 	}
 
 	static function formatSysInfo() {
-		__formattedSysText = #if android 'Device: ${Build.BRAND.charAt(0).toUpperCase() + Build.BRAND.substring(1)} ${Build.MODEL} (${Build.BOARD})\n' #else "" #end;
-		if (osInfo != "Unknown") __formattedSysText += 'System: $osInfo';
-		if (cpuName != "Unknown") __formattedSysText += '\nCPU: $cpuName ${getCPUArch()}';
+		var buf = new StringBuf();
+		if (osInfo != "Unknown") {
+			StringMacro.addLine(buf, 'System: ${osInfo}');
+		}
+		if (cpuName != "Unknown") {
+			StringMacro.addLine(buf, '\nCPU: ${cpuName} ${openfl.system.Capabilities.cpuArchitecture} ${openfl.system.Capabilities.supports64BitProcesses ? "64-Bit" : "32-Bit"}');
+		}
 		if (gpuName != cpuName || vRAM != "Unknown") {
 			var gpuNameKnown = gpuName != "Unknown" && gpuName != cpuName;
 			var vramKnown = vRAM != "Unknown";
 
-			if(gpuNameKnown || vramKnown) __formattedSysText += "\n";
+			if(gpuNameKnown || vramKnown) buf.add("\n");
 
-			if(gpuNameKnown) __formattedSysText += 'GPU: $gpuName';
-			if(gpuNameKnown && vramKnown) __formattedSysText += " | ";
-			if(vramKnown) __formattedSysText += 'VRAM: $vRAM'; // 1000 bytes of vram (apus)
+			if(gpuNameKnown) {
+				StringMacro.addLine(buf, 'GPU: ${gpuName}');
+			}
+			if(gpuNameKnown && vramKnown) buf.add(" | ");
+			if(vramKnown) {
+				StringMacro.addLine(buf, 'VRAM: ${vRAM}');
+			}
 		}
-		//if (gpuMaxSize != "Unknown") __formattedSysText += '\nMax Bitmap Size: $gpuMaxSize';
-		if (totalMem != "Unknown" && memType != "Unknown") __formattedSysText += '\nTotal MEM: $totalMem $memType';
+		//if (gpuMaxSize != "Unknown") StringMacro.addLine(buf, '\nMax Bitmap Size: ',gpuMaxSize);
+		if (totalMem != "Unknown" && memType != "Unknown") {
+			StringMacro.addLine(buf, '\nTotal MEM: ${totalMem} ${memType}');
+		}
+		#if desktop
+		__formattedSysText = buf.toString();
+		#elseif android
+		__formattedSysText = 'Device: ${Build.BRAND.charAt(0).toUpperCase() + Build.BRAND.substring(1)} ${Build.MODEL} (${Build.BOARD})\n';
+		#else
+		__formattedSysText = '';
+		#end
 	}
 
 	static function getSizeString(size:Float):String {
@@ -182,13 +200,17 @@ class SystemInfo extends FramerateCategory {
 
 	public function new() {
 		super("System Info");
+		visible = Options.fpsCounterSystem;
 	}
 
-	public override function __enterFrame(t:Int) {
+	public override function __enterFrame(t:Float) {
 		if (alpha <= 0.05) return;
 
-		_text = __formattedSysText;
-		_text += '${__formattedSysText == "" ? "" : "\n"}Garbage Collector: ${MemoryUtil.disableCount > 0 ? "OFF" : "ON"} (${MemoryUtil.disableCount})';
+		var buf = new StringBuf();
+		buf.add(__formattedSysText);
+		if (__formattedSysText != '') buf.add('\n');
+		StringMacro.addLine(buf, 'Garbage Collector: ${MemoryUtil.disableCount > 0 ? "OFF" : "ON"} (${MemoryUtil.disableCount})');
+		_text = buf.toString();
 
 		this.text.text = _text;
 		super.__enterFrame(t);
