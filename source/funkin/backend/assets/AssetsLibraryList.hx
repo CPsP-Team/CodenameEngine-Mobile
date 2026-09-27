@@ -241,7 +241,7 @@ class AssetsLibraryList extends AssetLibrary {
 		ModsFolder.addonsPath = '${Main.pathBack}addons/';
 		#end
 
-		rootDirectory = './${Main.pathBack}assets/';
+		rootDirectory = #if desktop './${Main.pathBack}assets/' #else MobileUtil.getAssetDirectory() + 'assets/'; //Need to test it - Mays
 	}
 	#end
 
